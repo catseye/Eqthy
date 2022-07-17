@@ -32,6 +32,7 @@ class Parser(object):
         self.scanner.expect('theorem')
         eqn = self.eqn()
         self.scanner.expect('proof')
+        steps = []
         while not self.scanner.on('qed'):
             steps.append(self.eqn())
         self.scanner.expect('qed')
