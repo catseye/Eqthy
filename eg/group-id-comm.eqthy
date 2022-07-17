@@ -1,0 +1,13 @@
+axiom mul(A, e) = A
+axiom mul(e, A) = A
+axiom mul(A, mul(B, C)) = mul(mul(A, B), C)
+
+theorem
+    mul(A, e) = mul(e, A)
+proof
+    A = A
+    mul(A, e) = A
+    mul(A, e) = mul(e, A)
+[]
+
+end
