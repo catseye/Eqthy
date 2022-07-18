@@ -9,5 +9,3 @@ proof
     mul(A, e) = A
     mul(A, e) = mul(e, A)
 qed
-
-end

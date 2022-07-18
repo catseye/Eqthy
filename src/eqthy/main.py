@@ -3,6 +3,7 @@ import codecs
 import sys
 
 from eqthy.parser import Parser
+from eqthy.verifier import Verifier
 
 
 def main(args):
@@ -10,6 +11,11 @@ def main(args):
 
     argparser.add_argument('input_files', nargs='+', metavar='FILENAME', type=str,
         help='Source files containing the scenario descriptions'
+    )
+
+    argparser.add_argument("--dump-ast",
+        action="store_true",
+        help="Just show the AST and stop"
     )
 
     options = argparser.parse_args(args)
@@ -21,6 +27,9 @@ def main(args):
 
     p = Parser(text, filename)
     ast = p.program()
-    # if options.dump_ast:
-    print(ast)
+    if options.dump_ast:
+        print(ast)
+        sys.exit(0)
 
+    verifier = Verifier(ast)
+    verifier.verify()
