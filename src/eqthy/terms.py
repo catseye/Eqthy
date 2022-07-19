@@ -5,6 +5,7 @@ from collections import namedtuple
 Term = namedtuple('Term', ['ctor', 'subterms'])
 Variable = namedtuple('Variable', ['name'])
 Eqn = namedtuple('Eqn', ['lhs', 'rhs'])
+RewriteRule = namedtuple('RewriteRule', ['pattern', 'substitution'])
 
 Unifier = namedtuple('Unifier', ['success', 'bindings'])
 
@@ -22,6 +23,10 @@ def render(t):
         return t.name
     elif isinstance(t, Eqn):
         return "{} = {}".format(render(t.lhs), render(t.rhs))
+    elif isinstance(t, RewriteRule):
+        return "{} => {}".format(render(t.pattern), render(t.substitution))
+    else:
+        return str(t)
 
 
 def merge_unifiers(first, next):

@@ -1,11 +1,13 @@
-from eqthy.terms import all_matches, render
+from eqthy.terms import all_matches, render, RewriteRule
 from collections import namedtuple
-
-RewriteRule = namedtuple('RewriteRule', ['pattern', 'substitution'])
 
 
 class DerivationError(Exception):
     pass
+
+
+def rewrite_deep(rule, term):
+    return False
 
 
 class Verifier:
@@ -38,12 +40,23 @@ class Verifier:
         prev = None
         for step in theorem.steps:
             if prev is None:
-                self.log("Confirming that {} follows from established rules", render(step))
+                self.log("Verifying that {} follows from established rules", render(step))
                 if step.lhs == step.rhs:
                     self.log("Confirmed that {} follows from Reflexivity", render(step))
                 else:
-                    raise DerivationError("Cannot derive {} from established rules".format(render(step)))
+                    raise DerivationError("Could not derive {} from established rules".format(render(step)))
             else:
-                self.log("Confirming that {} follows from {}", render(step), render(prev))
-                raise DerivationError("Cannot derive {} from {}".format(render(step), render(prev)))
+                self.log("Verifying that {} follows from {}", render(step), render(prev))
+
+                # TODO: if name of rule given, use that rule only
+                rewritten_lhs = None
+                for rule in self.rules:
+                    self.log("Trying to rewrite {} with {}", render(prev.lhs), render(rule))
+                    result = rewrite_deep(rule, prev.lhs)
+                    if result:
+                        rewritten_lhs = result
+                        break
+                if not rewritten_lhs:
+                    raise DerivationError("Could not derive {} from {}".format(render(step), render(prev)))
+
             prev = step
