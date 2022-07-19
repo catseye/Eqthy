@@ -17,6 +17,10 @@ def main(args):
         action="store_true",
         help="Just show the AST and stop"
     )
+    argparser.add_argument("--verbose",
+        action="store_true",
+        help="Tell the user about every little thing"
+    )
 
     options = argparser.parse_args(args)
 
@@ -31,5 +35,9 @@ def main(args):
         print(ast)
         sys.exit(0)
 
-    verifier = Verifier(ast)
-    verifier.verify()
+    verifier = Verifier(ast, verbose=options.verbose)
+    try:
+        verifier.verify()
+    except Exception as e:
+        print('*** {}: {}'.format(e.__class__.__name__, e))
+        sys.exit(1)

@@ -1,4 +1,4 @@
-from eqthy.terms import all_matches
+from eqthy.terms import all_matches, render
 from collections import namedtuple
 
 RewriteRule = namedtuple('RewriteRule', ['pattern', 'substitution'])
@@ -34,9 +34,16 @@ class Verifier:
             self.rules.append(RewriteRule(pattern=rhs, substitution=lhs))
 
     def verify_theorem(self, theorem):
-        self.log("Verifying theorem {}", theorem)
+        self.log("Verifying theorem {}", render(theorem.eqn))
         prev = None
         for step in theorem.steps:
-            self.log("Confirming that {} follows from {}", step, prev)
+            if prev is None:
+                self.log("Confirming that {} follows from established rules", render(step))
+                if step.lhs == step.rhs:
+                    self.log("Confirmed that {} follows from Reflexivity", render(step))
+                else:
+                    raise DerivationError("Cannot derive {} from established rules".format(render(step)))
+            else:
+                self.log("Confirming that {} follows from {}", render(step), render(prev))
+                raise DerivationError("Cannot derive {} from {}".format(render(step), render(prev)))
             prev = step
-        raise DerivationError("Cannot derive {} from {}".format(step, prev))

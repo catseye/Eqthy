@@ -1,13 +1,12 @@
 from collections import namedtuple
 
 from eqthy.scanner import Scanner
-from eqthy.terms import Term, Variable
+from eqthy.terms import Term, Variable, Eqn
 
 
 Program = namedtuple('Program', ['axioms', 'theorems'])
 Axiom = namedtuple('Axiom', ['eqn'])
 Theorem = namedtuple('Theorem', ['eqn', 'steps'])
-Eqn = namedtuple('Eqn', ['lhs', 'rhs'])
 
 
 class Parser(object):

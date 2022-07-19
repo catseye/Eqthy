@@ -4,11 +4,24 @@ from collections import namedtuple
 
 Term = namedtuple('Term', ['ctor', 'subterms'])
 Variable = namedtuple('Variable', ['name'])
+Eqn = namedtuple('Eqn', ['lhs', 'rhs'])
 
 Unifier = namedtuple('Unifier', ['success', 'bindings'])
 
 
 unify_fail = Unifier(success=False, bindings={})
+
+
+def render(t):
+    if isinstance(t, Term):
+        if t.subterms:
+            return "{}({})".format(t.ctor, ', '.join([render(st) for st in t.subterms]))
+        else:
+            return t.ctor
+    elif isinstance(t, Variable):
+        return t.name
+    elif isinstance(t, Eqn):
+        return "{} = {}".format(render(t.lhs), render(t.rhs))
 
 
 def merge_unifiers(first, next):
