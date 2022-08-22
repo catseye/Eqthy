@@ -3,9 +3,9 @@
 import re
 
 
-class SixtyPicalSyntaxError(ValueError):
+class EqthySyntaxError(ValueError):
     def __init__(self, filename, line_number, message):
-        super(SixtyPicalSyntaxError, self).__init__(filename, line_number, message)
+        super(EqthySyntaxError, self).__init__(filename, line_number, message)
 
     def __str__(self):
         return "{}, line {}: {}".format(self.args[0], self.args[1], self.args[2])
@@ -83,4 +83,4 @@ class Scanner(object):
             return False
 
     def syntax_error(self, msg):
-        raise SixtyPicalSyntaxError(self.filename, self.line_number, msg)
+        raise EqthySyntaxError(self.filename, self.line_number, msg)
