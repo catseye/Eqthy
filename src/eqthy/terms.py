@@ -48,7 +48,7 @@ def match(pattern, term):
     else:
         assert isinstance(pattern, Term)
         if not isinstance(term, Term) or len(term.subterms) != len(pattern.subterms):
-            return False
+            return unify_fail
         unifier = Unifier(success=True, bindings={})
         for (subpattern, subterm) in zip(pattern.subterms, term.subterms):
             subunifier = match(subpattern, subterm)
@@ -63,9 +63,25 @@ def all_matches(pattern, term, index=None):
     matches = []
 
     unifier = match(pattern, term)
-    matches.append((index, unifier))
+    if unifier.success:
+        matches.append((index, unifier))
 
-    for n, subterm in enumerate(term.subterms):
-        matches += all_matches(pattern, subterm, index + [n])
+    if isinstance(term, Term):
+        for n, subterm in enumerate(term.subterms):
+            matches += all_matches(pattern, subterm, index + [n])
 
     return matches
+
+
+def subst(term, unifier):
+    if not unifier.success:
+        return term
+    elif isinstance(term, Variable):
+        if term.name in unifier.bindings:
+            return unifier.bindings[term.name]
+        else:
+            return term
+    elif isinstance(term, Term):
+        return Term(term.ctor, [subst(st, unifier) for st in term.subterms])
+    else:
+        raise NotImplementedError(str(term))

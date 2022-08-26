@@ -4,6 +4,14 @@ from eqthy.scanner import Scanner
 from eqthy.terms import Term, Variable, Eqn
 
 
+# Program := {Axiom} {Theorem}.
+# Axiom   := "axiom" Eqn.
+# Theorem := "theorem" Eqn "proof" {Step} "qed".
+# Step    := Eqn.
+# Eqn     := Term "=" Term.
+# Term    := Var | Name ["(" [Term {"," Term} ")"].
+
+
 Program = namedtuple('Program', ['axioms', 'theorems'])
 Axiom = namedtuple('Axiom', ['eqn'])
 Theorem = namedtuple('Theorem', ['eqn', 'steps'])

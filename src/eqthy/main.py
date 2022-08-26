@@ -17,6 +17,10 @@ def main(args):
         action="store_true",
         help="Just show the AST and stop"
     )
+    argparser.add_argument("--traceback",
+        action="store_true",
+        help="When an error occurs, display a full Python traceback."
+    )
     argparser.add_argument("--verbose",
         action="store_true",
         help="Tell the user about every little thing"
@@ -40,4 +44,6 @@ def main(args):
         verifier.verify()
     except Exception as e:
         print('*** {}: {}'.format(e.__class__.__name__, e))
+        if options.traceback:
+            raise
         sys.exit(1)

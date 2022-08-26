@@ -1,13 +1,9 @@
-from eqthy.terms import all_matches, render, RewriteRule
+from eqthy.terms import all_matches, subst, render, RewriteRule
 from collections import namedtuple
 
 
 class DerivationError(Exception):
     pass
-
-
-def rewrite_deep(rule, term):
-    return False
 
 
 class Verifier:
@@ -51,12 +47,22 @@ class Verifier:
                 # TODO: if name of rule given, use that rule only
                 rewritten_lhs = None
                 for rule in self.rules:
-                    self.log("Trying to rewrite {} with {}", render(prev.lhs), render(rule))
-                    result = rewrite_deep(rule, prev.lhs)
-                    if result:
-                        rewritten_lhs = result
-                        break
+                    self.log("  Trying to rewrite {} with {}", render(prev.lhs), render(rule))
+                    rewrites = self.all_rewrites(rule, prev.lhs)
+                    if rewrites:
+                        for rewrite in rewrites:
+                            self.log("    Can rewrite to {}", render(rewrite))
+                        # rewritten_lhs = result
+                        # break
                 if not rewritten_lhs:
                     raise DerivationError("Could not derive {} from {}".format(render(step), render(prev)))
 
             prev = step
+
+    def all_rewrites(self, rule, term):
+        matches = all_matches(rule.pattern, term)
+        self.log("    Matches: {}", matches)
+        rewrites = []
+        for (index, unifier) in matches:
+            rewrites += subst(term, unifier)
+        return rewrites
