@@ -14,7 +14,7 @@ For an overview of the language, see the README file.
 This source is well-formed.  It will parse.
 
     axiom inv(A) = A
-    ===> Program(axioms=[Axiom(name=None, eqn=Eqn(lhs=Term(ctor='inv', subterms=[Variable(name='A')]), rhs=Variable(name='A')))], theorems=[])
+    ===> Development(axioms=[Axiom(name=None, eqn=Eqn(lhs=Term(ctor='inv', subterms=[Variable(name='A')]), rhs=Variable(name='A')))], theorems=[])
 
 This source is not well-formed.  It will not parse.
 

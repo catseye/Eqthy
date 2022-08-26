@@ -6,9 +6,9 @@ class DerivationError(Exception):
 
 
 class Verifier:
-    def __init__(self, program, verbose=True):
-        self.axioms = program.axioms
-        self.theorems = program.theorems
+    def __init__(self, development, verbose=True):
+        self.axioms = development.axioms
+        self.theorems = development.theorems
         self.verbose = verbose
         self.rules = []
 

@@ -7,7 +7,7 @@ developed and popularized by Dijkstra et al.
 This document is a sketch.  It describes the language.  It mentions some things a processor of the language
 might be expected to do.
 
-An Eqthy source consists of any number of axioms and theorems.  Each axiom is an equation.
+An Eqthy development consists of any number of axioms and theorems.  Each axiom is an equation.
 An equation equates two terms.  Terms consist of constructors (also called function symbols)
 and variables.  Variables begin with uppercase letters.  Constructors begin with lowercase
 letters are followed by a list of zero or more subterms, enclosed in parentheses.
@@ -34,7 +34,7 @@ indicating what rule was used to derive it.
 
 Each step in a theorem can be checked for validity by a processor.  The processor
 may be a computer program.  During this checking, the processor has access to all
-the axioms and all the theories previously given in this Eqthy source
+the axioms and all the theories previously given in this Eqthy development
 (and possibly from shared libraries).  The checking process ensures that the first
 step can be obtained from an axiom or previously proved theory, that each step
 can be derived from the previous step, and that the equation being proved matches
@@ -73,7 +73,7 @@ as it is sometimes not obvious what is being substituted where.
     mul(A, mul(mul(A, B), inv(mul(A, B)))) = mul(A, e)   [by congruence of mul(A, B) and B]
 
 Once the processor has resolved what rules were applies and checked that the proof is
-valid, it can _pretty-print_ an _annotated_ version of the input Eqthy source, one which
-includes all of the hints that it inferred.  This pretty-printed source can be checked
+valid, it can _pretty-print_ an _annotated_ version of the input Eqthy development, one which
+includes all of the hints that it inferred.  This pretty-printed development can be checked
 again in the future, and more efficiently, as all the searches for hints have been
 already performed.

@@ -4,7 +4,7 @@ from eqthy.scanner import Scanner
 from eqthy.terms import Term, Variable, Eqn
 
 
-# Program := {Axiom} {Theorem}.
+# Development := {Axiom} {Theorem}.
 # Axiom   := "axiom" [Name] Eqn.
 # Theorem := "theorem" [Name] Eqn "proof" {Step} "qed".
 # Name    := "(" Ident ")".
@@ -17,7 +17,7 @@ from eqthy.terms import Term, Variable, Eqn
 # Term    := Var | Ctor ["(" [Term {"," Term} ")"].
 
 
-Program = namedtuple('Program', ['axioms', 'theorems'])
+Development = namedtuple('Development', ['axioms', 'theorems'])
 Axiom = namedtuple('Axiom', ['name', 'eqn'])
 Theorem = namedtuple('Theorem', ['name', 'eqn', 'steps'])
 Step = namedtuple('Step', ['eqn', 'hint'])
@@ -27,14 +27,14 @@ class Parser(object):
     def __init__(self, text, filename):
         self.scanner = Scanner(text, filename)
 
-    def program(self):
+    def development(self):
         axioms = []
         theorems = []
         while self.scanner.on('axiom'):
             axioms.append(self.axiom())
         while self.scanner.on('theorem'):
             theorems.append(self.theorem())
-        return Program(axioms=axioms, theorems=theorems)
+        return Development(axioms=axioms, theorems=theorems)
 
     def axiom(self):
         self.scanner.expect('axiom')
