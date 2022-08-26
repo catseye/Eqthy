@@ -32,6 +32,46 @@ This source consists of some axioms and a theorem.
     axiom mul(e, A) = A
     axiom mul(A, mul(B, C)) = mul(mul(A, B), C)
     theorem
+        mul(A, e) = A
+    proof
+        A = A
+        mul(A, e) = A
+    qed
+    ===> ok
+
+This "proof" contains a misstep.
+
+    axiom mul(A, e) = A
+    axiom mul(e, A) = A
+    axiom mul(A, mul(B, C)) = mul(mul(A, B), C)
+    theorem
+        mul(A, e) = mul(foo, mul(e, A))
+    proof
+        A = A
+        mul(A, e) = A
+        mul(A, e) = mul(foo, mul(e, A))
+    qed
+    ???> DerivationError: Could not derive mul(A, e) = mul(foo, mul(e, A)) from mul(A, e) = A
+
+This theorem does not prove what it says it proves.
+
+    axiom mul(A, e) = A
+    axiom mul(e, A) = A
+    axiom mul(A, mul(B, C)) = mul(mul(A, B), C)
+    theorem
+        mul(A, e) = mul(A, A)
+    proof
+        A = A
+        mul(A, e) = A
+    qed
+    ???> DerivationError: No step in proof showed mul(A, e) = mul(A, A)
+
+This proof requires rewrites on the right-hand side of the equation.
+
+    axiom mul(A, e) = A
+    axiom mul(e, A) = A
+    axiom mul(A, mul(B, C)) = mul(mul(A, B), C)
+    theorem
         mul(A, e) = mul(e, A)
     proof
         A = A
