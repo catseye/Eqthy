@@ -1,6 +1,6 @@
 from collections import namedtuple
 
-from eqthy.scanner import Scanner
+from eqthy.scanner import Scanner, EqthySyntaxError
 from eqthy.terms import Term, Variable, Eqn
 
 
@@ -21,6 +21,10 @@ Development = namedtuple('Development', ['axioms', 'theorems'])
 Axiom = namedtuple('Axiom', ['name', 'eqn'])
 Theorem = namedtuple('Theorem', ['name', 'eqn', 'steps'])
 Step = namedtuple('Step', ['eqn', 'hint'])
+Reflexivity = namedtuple('Reflexivity', [])
+Substitution = namedtuple('Substitution', ['term', 'variable'])
+Congruence = namedtuple('Congruence', ['term', 'variable'])
+Reference = namedtuple('Reference', ['name', 'side'])
 
 
 class Parser(object):
@@ -74,9 +78,30 @@ class Parser(object):
 
     def hint(self):
         if self.scanner.consume('reflexivity'):
-            return ("reflexivity",)
+            return Reflexivity()
+        elif self.scanner.consume('substitution'):
+            self.scanner.expect('of')
+            term = self.term()
+            self.scanner.expect('into')
+            variable = self.term()
+            return Substitution(term=term, variable=variable)
+        elif self.scanner.consume('congruence'):
+            self.scanner.expect('of')
+            term = self.term()
+            self.scanner.expect('and')
+            variable = self.term()
+            return Congruence(term=term, variable=variable)
         else:
-            raise NotImplementedError()
+            name = self.scanner.token
+            side = None
+            self.scanner.scan()
+            if self.scanner.consume('on'):
+                if self.scanner.on('LHS') or self.scanner.on('RHS'):
+                    side = self.scanner.token
+                    self.scanner.scan()
+                else:
+                    raise EqthySyntaxError("Expected 'LHS' or 'RHS'")
+            return Reference(name=name, side=side)
 
     def eqn(self):
         lhs = self.term()

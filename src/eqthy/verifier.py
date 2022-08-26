@@ -42,7 +42,7 @@ class Verifier:
                 else:
                     raise DerivationError("Could not derive {} from established rules".format(render(step.eqn)))
             else:
-                self.log("Verifying that {} follows from {}", render(step.eqn), render(prev))
+                self.log("Verifying that {} follows from {}", render(step.eqn), render(prev.eqn))
                 if not self.obtain_rewritten_step(step, prev):
                     raise DerivationError("Could not derive {} from {}".format(render(step.eqn), render(prev.eqn)))
 
@@ -54,7 +54,9 @@ class Verifier:
             raise DerivationError("No step in proof showed {}".format(render(theorem.eqn)))
 
     def obtain_rewritten_step(self, step, prev):
-        # TODO: if name of rule given, use that rule only
+        if step.hint:
+            # TODO: if name of rule given in hint, use that rule only
+            self.log("==> step has hint {}", step.hint)
         for rule in self.rules:
             self.log("  Trying to rewrite lhs {} with {}", render(prev.eqn.lhs), render(rule))
             for rewritten_lhs in self.all_rewrites(rule, prev.eqn.lhs):
@@ -72,7 +74,6 @@ class Verifier:
 
     def all_rewrites(self, rule, term):
         matches = all_matches(rule.pattern, term)
-        self.log("    Matches: {}", matches)
         rewrites = []
         for (index, unifier) in matches:
             rewrites.append(subst(rule.substitution, unifier))

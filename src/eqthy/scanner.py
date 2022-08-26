@@ -46,11 +46,9 @@ class Scanner(object):
             return
         if self.scan_pattern(r'\d+', 'integer literal'):
             return
-        if self.scan_pattern(r'\$([0-9a-fA-F]+)', 'integer literal', token_group=2):
-            # ecch
-            self.token = str(eval('0x' + self.token))
-            return
         if self.scan_pattern(r'\"(.*?)\"', 'string literal', token_group=2):
+            return
+        if self.scan_pattern(r'#[^])\s]+', 'identifier'):
             return
         if self.scan_pattern(r'\w+', 'identifier'):
             return
