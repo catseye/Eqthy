@@ -5,16 +5,17 @@ from eqthy.terms import Term, Variable, Eqn
 
 
 # Program := {Axiom} {Theorem}.
-# Axiom   := "axiom" Eqn.
-# Theorem := "theorem" Eqn "proof" {Step} "qed".
+# Axiom   := "axiom" [Name] Eqn.
+# Theorem := "theorem" [Name] Eqn "proof" {Step} "qed".
+# Name    := "(" Ident ")".
 # Step    := Eqn.
 # Eqn     := Term "=" Term.
-# Term    := Var | Name ["(" [Term {"," Term} ")"].
+# Term    := Var | Ctor ["(" [Term {"," Term} ")"].
 
 
 Program = namedtuple('Program', ['axioms', 'theorems'])
-Axiom = namedtuple('Axiom', ['eqn'])
-Theorem = namedtuple('Theorem', ['eqn', 'steps'])
+Axiom = namedtuple('Axiom', ['name', 'eqn'])
+Theorem = namedtuple('Theorem', ['name', 'eqn', 'steps'])
 
 
 class Parser(object):
@@ -32,18 +33,29 @@ class Parser(object):
 
     def axiom(self):
         self.scanner.expect('axiom')
+        name = self.name()
         eqn = self.eqn()
-        return Axiom(eqn=eqn)
+        return Axiom(name=name, eqn=eqn)
 
     def theorem(self):
         self.scanner.expect('theorem')
+        name = self.name()
         eqn = self.eqn()
         self.scanner.expect('proof')
         steps = []
         while not self.scanner.on('qed'):
             steps.append(self.eqn())
         self.scanner.expect('qed')
-        return Theorem(eqn=eqn, steps=steps)
+        return Theorem(name=name, eqn=eqn, steps=steps)
+
+    def name(self):
+        if self.scanner.consume('('):
+            ident = self.scanner.token
+            self.scanner.scan()
+            self.scanner.expect(')')
+            return ident
+        else:
+            return None
 
     def eqn(self):
         lhs = self.term()

@@ -14,7 +14,7 @@ For an overview of the language, see the README file.
 This source is well-formed.  It will parse.
 
     axiom inv(A) = A
-    ===> Program(axioms=[Axiom(eqn=Eqn(lhs=Term(ctor='inv', subterms=[Variable(name='A')]), rhs=Variable(name='A')))], theorems=[])
+    ===> Program(axioms=[Axiom(name=None, eqn=Eqn(lhs=Term(ctor='inv', subterms=[Variable(name='A')]), rhs=Variable(name='A')))], theorems=[])
 
 This source is not well-formed.  It will not parse.
 
@@ -36,6 +36,19 @@ This source consists of some axioms and a theorem.
     proof
         A = A
         mul(A, e) = A
+    qed
+    ===> ok
+
+Any variable name you like can be used in a theorem.
+
+    axiom mul(A, e) = A
+    axiom mul(e, A) = A
+    axiom mul(A, mul(B, C)) = mul(mul(A, B), C)
+    theorem
+        mul(Z, e) = Z
+    proof
+        Z = Z
+        mul(Z, e) = Z
     qed
     ===> ok
 
@@ -72,6 +85,20 @@ This proof requires rewrites on the right-hand side of the equation.
     axiom mul(e, A) = A
     axiom mul(A, mul(B, C)) = mul(mul(A, B), C)
     theorem
+        mul(A, e) = mul(e, A)
+    proof
+        A = A
+        mul(A, e) = A
+        mul(A, e) = mul(e, A)
+    qed
+    ===> ok
+
+Axioms and theorems can be named.
+
+    axiom (idright) mul(A, e) = A
+    axiom (idleft)  mul(e, A) = A
+    axiom (assoc)   mul(A, mul(B, C)) = mul(mul(A, B), C)
+    theorem (idcomm)
         mul(A, e) = mul(e, A)
     proof
         A = A
