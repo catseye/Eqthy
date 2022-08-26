@@ -106,3 +106,15 @@ Axioms and theorems can be named.
         mul(A, e) = mul(e, A)
     qed
     ===> ok
+
+Proof steps can use the "reflexivity" hint.
+
+    axiom (idright) mul(A, e) = A
+    axiom (idleft)  mul(e, A) = A
+    axiom (assoc)   mul(A, mul(B, C)) = mul(mul(A, B), C)
+    theorem (refl)
+        A = A
+    proof
+        A = A [by reflexivity]
+    qed
+    ===> ok

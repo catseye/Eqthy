@@ -68,7 +68,6 @@ class Parser(object):
             self.scanner.expect('by')
             hint = self.hint()
             self.scanner.expect(']')
-            return ident
         else:
             hint = None
         return Step(eqn=eqn, hint=hint)
