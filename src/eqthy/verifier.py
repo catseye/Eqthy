@@ -1,5 +1,4 @@
 from eqthy.terms import all_matches, subst, render, RewriteRule
-from collections import namedtuple
 
 
 class DerivationError(Exception):
@@ -52,8 +51,8 @@ class Verifier:
                     if rewrites:
                         for rewrite in rewrites:
                             self.log("    Can rewrite to {}", render(rewrite))
-                        # rewritten_lhs = result
-                        # break
+                            rewritten_lhs = rewrite
+                            break
                 if not rewritten_lhs:
                     raise DerivationError("Could not derive {} from {}".format(render(step), render(prev)))
 
@@ -64,5 +63,5 @@ class Verifier:
         self.log("    Matches: {}", matches)
         rewrites = []
         for (index, unifier) in matches:
-            rewrites += subst(term, unifier)
+            rewrites.append(subst(rule.substitution, unifier))
         return rewrites

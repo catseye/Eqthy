@@ -22,7 +22,7 @@ This source is not well-formed.  It will not parse.
     ???> Expected '=', but found '.'
 
     -> Functionality "Check Eqthy source" is implemented by shell command
-    -> "python3 bin/eqthy %(test-body-file)"
+    -> "python3 bin/eqthy %(test-body-file) && echo 'ok'"
 
     -> Tests for functionality "Check Eqthy source"
 

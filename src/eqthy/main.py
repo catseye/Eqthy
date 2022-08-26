@@ -9,19 +9,23 @@ from eqthy.verifier import Verifier
 def main(args):
     argparser = ArgumentParser()
 
-    argparser.add_argument('input_files', nargs='+', metavar='FILENAME', type=str,
+    argparser.add_argument(
+        'input_files', nargs='+', metavar='FILENAME', type=str,
         help='Source files containing the scenario descriptions'
     )
 
-    argparser.add_argument("--dump-ast",
+    argparser.add_argument(
+        "--dump-ast",
         action="store_true",
         help="Just show the AST and stop"
     )
-    argparser.add_argument("--traceback",
+    argparser.add_argument(
+        "--traceback",
         action="store_true",
         help="When an error occurs, display a full Python traceback."
     )
-    argparser.add_argument("--verbose",
+    argparser.add_argument(
+        "--verbose",
         action="store_true",
         help="Tell the user about every little thing"
     )
