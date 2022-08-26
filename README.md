@@ -64,6 +64,14 @@ In the above theorem, if we omit the hints, the processor must deduce by itself 
 Additionally, if the step `B = A` appears immediately after `A = B`, it can infer that
 the rule of symmetry was invoked.
 
+The rules of substitution and congruence may also be invoked; they may require a hint,
+as it is sometimes not obvious what is being substituted where.
+
+    e = e                                                [by reflexivity]
+    mul(C, inv(C)) = e                                   [by #inverse on LHS]
+    mul(mul(A, B), inv(mul(A, B))) = e                   [by substitution of mul(A, B) for C]
+    mul(A, mul(mul(A, B), inv(mul(A, B)))) = mul(A, e)   [by congruence of mul(A, B) and B]
+
 Once the processor has resolved what rules were applies and checked that the proof is
 valid, it can _pretty-print_ an _annotated_ version of the input Eqthy source, one which
 includes all of the hints that it inferred.  This pretty-printed source can be checked

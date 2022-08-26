@@ -8,7 +8,11 @@ from eqthy.terms import Term, Variable, Eqn
 # Axiom   := "axiom" [Name] Eqn.
 # Theorem := "theorem" [Name] Eqn "proof" {Step} "qed".
 # Name    := "(" Ident ")".
-# Step    := Eqn.
+# Step    := Eqn ["[" "by" Hint "]"].
+# Hint    := "reflexivity"
+#          | "substitution" "of" Term "into" Term
+#          | "congruence" "of" Term "and" Term
+#          | Ident ["on" ("LHS" | "RHS")].
 # Eqn     := Term "=" Term.
 # Term    := Var | Ctor ["(" [Term {"," Term} ")"].
 
@@ -16,6 +20,7 @@ from eqthy.terms import Term, Variable, Eqn
 Program = namedtuple('Program', ['axioms', 'theorems'])
 Axiom = namedtuple('Axiom', ['name', 'eqn'])
 Theorem = namedtuple('Theorem', ['name', 'eqn', 'steps'])
+Step = namedtuple('Step', ['eqn', 'hint'])
 
 
 class Parser(object):
@@ -44,7 +49,7 @@ class Parser(object):
         self.scanner.expect('proof')
         steps = []
         while not self.scanner.on('qed'):
-            steps.append(self.eqn())
+            steps.append(self.step())
         self.scanner.expect('qed')
         return Theorem(name=name, eqn=eqn, steps=steps)
 
@@ -56,6 +61,23 @@ class Parser(object):
             return ident
         else:
             return None
+
+    def step(self):
+        eqn = self.eqn()
+        if self.scanner.consume('['):
+            self.scanner.expect('by')
+            hint = self.hint()
+            self.scanner.expect(']')
+            return ident
+        else:
+            hint = None
+        return Step(eqn=eqn, hint=hint)
+
+    def hint(self):
+        if self.scanner.consume('reflexivity'):
+            return ("reflexivity",)
+        else:
+            raise NotImplementedError()
 
     def eqn(self):
         lhs = self.term()

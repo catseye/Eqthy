@@ -36,18 +36,17 @@ class Verifier:
         eqn_shown = False
         for step in theorem.steps:
             if prev is None:
-                self.log("Verifying that {} follows from established rules", render(step))
-                if step.lhs == step.rhs:
-                    self.log("Confirmed that {} follows from Reflexivity", render(step))
+                self.log("Verifying that {} follows from established rules", render(step.eqn))
+                if step.eqn.lhs == step.eqn.rhs:
+                    self.log("Confirmed that {} follows from Reflexivity", render(step.eqn))
                 else:
-                    raise DerivationError("Could not derive {} from established rules".format(render(step)))
+                    raise DerivationError("Could not derive {} from established rules".format(render(step.eqn)))
             else:
-                self.log("Verifying that {} follows from {}", render(step), render(prev))
-                rewritten_step = self.obtain_rewritten_step(step, prev)
-                if not rewritten_step:
-                    raise DerivationError("Could not derive {} from {}".format(render(step), render(prev)))
+                self.log("Verifying that {} follows from {}", render(step.eqn), render(prev))
+                if not self.obtain_rewritten_step(step, prev):
+                    raise DerivationError("Could not derive {} from {}".format(render(step.eqn), render(prev.eqn)))
 
-            if step == theorem.eqn:
+            if step.eqn == theorem.eqn:
                 eqn_shown = True
             prev = step
 
@@ -57,19 +56,19 @@ class Verifier:
     def obtain_rewritten_step(self, step, prev):
         # TODO: if name of rule given, use that rule only
         for rule in self.rules:
-            self.log("  Trying to rewrite lhs {} with {}", render(prev.lhs), render(rule))
-            for rewritten_lhs in self.all_rewrites(rule, prev.lhs):
-                rewritten_step = Eqn(rewritten_lhs, prev.rhs)
-                if step == rewritten_step:
-                    self.log("    Can rewrite lhs to obtain: {}", render(rewritten_step))
-                    return rewritten_step
+            self.log("  Trying to rewrite lhs {} with {}", render(prev.eqn.lhs), render(rule))
+            for rewritten_lhs in self.all_rewrites(rule, prev.eqn.lhs):
+                rewritten_eqn = Eqn(rewritten_lhs, prev.eqn.rhs)
+                if step.eqn == rewritten_eqn:
+                    self.log("    Can rewrite lhs to obtain: {}", render(rewritten_eqn))
+                    return rewritten_eqn
 
-            self.log("  Trying to rewrite rhs {} with {}", render(prev.rhs), render(rule))
-            for rewritten_rhs in self.all_rewrites(rule, prev.rhs):
-                rewritten_step = Eqn(prev.lhs, rewritten_rhs)
-                if step == rewritten_step:
-                    self.log("    Can rewrite rhs to obtain: {}", render(rewritten_step))
-                    return rewritten_step
+            self.log("  Trying to rewrite rhs {} with {}", render(prev.eqn.rhs), render(rule))
+            for rewritten_rhs in self.all_rewrites(rule, prev.eqn.rhs):
+                rewritten_eqn = Eqn(prev.eqn.lhs, rewritten_rhs)
+                if step.eqn == rewritten_eqn:
+                    self.log("    Can rewrite rhs to obtain: {}", render(rewritten_eqn))
+                    return rewritten_eqn
 
     def all_rewrites(self, rule, term):
         matches = all_matches(rule.pattern, term)
