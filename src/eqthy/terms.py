@@ -78,7 +78,7 @@ def all_matches(pattern, term, index=None):
     return matches
 
 
-def subst(term, unifier):
+def expand(term, unifier):
     if not unifier.success:
         return term
     elif isinstance(term, Variable):
@@ -87,7 +87,7 @@ def subst(term, unifier):
         else:
             return term
     elif isinstance(term, Term):
-        return Term(term.ctor, [subst(st, unifier) for st in term.subterms])
+        return Term(term.ctor, [expand(st, unifier) for st in term.subterms])
     else:
         raise NotImplementedError(str(term))
 
@@ -95,24 +95,22 @@ def subst(term, unifier):
 def subterm_at_index(term, index):
     if not index:
         return term
-    if len(index) and isinstance(term, Term):
+    elif isinstance(term, Term):
         position = index[0]
         return subterm_at_index(term.subterms[position], index[1:])
     else:
         raise KeyError('{} at {}'.format(str(term), index))
 
 
-def subst_at_index(term, unifier, index):
-    if not unifier.success:
-        return term
+def update_at_index(term, subterm, index):
     if not index:
-        return subst(term, unifier)
-    if len(index) and isinstance(term, Term):
+        return subterm
+    elif isinstance(term, Term):
         position = index[0]
-        new_subterm = subst_at_index(term.subterms[position], unifier, index[1:])
-        subterms = term.subterms[:]
-        subterms[position] = new_subterm
-        return Term(term.ctor, subterms)
+        replaced_subterm = update_at_index(term.subterms[position], subterm, index[1:])
+        new_subterms = copy(term.subterms)
+        new_subterms[position] = replaced_subterm
+        return Term(term.ctor, new_subterms)
     else:
         raise KeyError('{} at {}'.format(str(term), index))
 

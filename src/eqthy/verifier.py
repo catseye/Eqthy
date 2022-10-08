@@ -1,6 +1,6 @@
 # TODO: these should probably come from a "eqthy.hints" module
 from eqthy.parser import Substitution, Congruence
-from eqthy.terms import Eqn, all_matches, subst_at_index, subterm_at_index, render, RewriteRule, replace
+from eqthy.terms import Eqn, all_matches, expand, subterm_at_index, update_at_index, render, RewriteRule, replace
 
 
 class DerivationError(Exception):
@@ -101,11 +101,19 @@ class Verifier:
                     return rewritten_eqn
 
     def all_rewrites(self, rule, term):
+        """Given a term, and a rule, return a list of the terms that would result
+        from rewriting the term in all the possible ways by the rule."""
+
+        # First, obtain all the unifiers where the pattern of the rule matches any subterm of the term
         matches = all_matches(rule.pattern, term)
+
+        # Now, collect all the rewritten terms -- a subterm replaced by the expanded rhs of the rule
         rewrites = []
-        self.log('//////////////')
+        # self.log('////////////// {} matched by: {} //////', render(term), render(rule))
         for (index, unifier) in matches:
-            self.log("// {} at {} is {} : {}", render(term), index, render(subterm_at_index(term, index)), render(unifier))
-        for (index, unifier) in matches:
-            rewrites.append(subst_at_index(rule.substitution, unifier, index))
+            rewritten_subterm = expand(rule.substitution, unifier)
+            result = update_at_index(term, rewritten_subterm, index)
+            # self.log("// at {}, unifier is {}, rewritten_subterm is {}, result is {}", index, render(unifier), render(rewritten_subterm), render(result))
+            rewrites.append(result)
+
         return rewrites
