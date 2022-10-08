@@ -1,14 +1,17 @@
 axiom (#id-right) mul(A, e) = A
 axiom (#id-left)  mul(e, A) = A
 axiom (#assoc)    mul(A, mul(B, C)) = mul(mul(A, B), C)
-axiom (#inv)      mul(A, inv(A)) = e
-axiom (#invB)     mul(B, inv(B)) = e
+axiom (#invA1)    mul(A, inv(A)) = e
+axiom (#invA2)    mul(inv(A), A) = e
+axiom (#invB1)    mul(B, inv(B)) = e
+axiom (#invB2)    mul(inv(B), B) = e
 
 theorem (#socks-and-shoes)
     inv(mul(A, B)) = mul(inv(B), inv(A))
 proof
     e = e
     mul(A, inv(A)) = e
+
     mul(mul(A, B), inv(mul(A, B))) = e                 [by substitution of mul(A, B) into A]
     mul(mul(A, B), inv(mul(A, B))) = mul(A, inv(A))
     mul(mul(A, B), inv(mul(A, B))) = mul(mul(A, e), inv(A))
@@ -16,20 +19,41 @@ proof
     mul(mul(A, B), inv(mul(A, B))) = mul(mul(mul(A, B), inv(B)), inv(A))
     mul(mul(A, B), inv(mul(A, B))) = mul(mul(A, B), mul(inv(B), inv(A)))
 
-    //    s9 = check (leibniz e2 "c" s8)        "(~a*((a*b)*~(a*b)))=(~a*((a*b)*(~b*~a)))"  [by congruence of ... and mul(inv(A), C)]
+    mul(inv(A), mul(mul(A, B), inv(mul(A, B)))) = mul(inv(A), mul(mul(A, B), mul(inv(B), inv(A))))  [by congruence of C and mul(inv(A), C)]
+    mul(mul(inv(A), mul(A, B)), inv(mul(A, B))) = mul(inv(A), mul(mul(A, B), mul(inv(B), inv(A))))
+    mul(mul(mul(inv(A), A), B), inv(mul(A, B))) = mul(inv(A), mul(mul(A, B), mul(inv(B), inv(A))))
+    mul(mul(e, B), inv(mul(A, B))) = mul(inv(A), mul(mul(A, B), mul(inv(B), inv(A))))
+    mul(B, inv(mul(A, B))) = mul(inv(A), mul(mul(A, B), mul(inv(B), inv(A))))
+
+    //    s1 = check (reflex Ident)             "e=e"
+    //    s2 = check (invIntroR "c" [1] s1)     "(c*~c)=e"
+
+    //    e1 = (Mul (Var "a") (Var "b"))
+    //    s3 = check (subst e1 "c" s2)          "((a*b)*~(a*b))=e"
+    //    s4 = check (invIntroR "a" [2] s3)     "((a*b)*~(a*b))=(a*~a)"
+    //    s5 = check (identIntroR [2,1] s4)     "((a*b)*~(a*b))=((a*e)*~a)"
+    //    s6 = check (invIntroR "b" [2,1,2] s5) "((a*b)*~(a*b))=((a*(b*~b))*~a)"
+    //    s7 = check (assocR [2,1] s6)          "((a*b)*~(a*b))=(((a*b)*~b)*~a)"
+    //    s8 = check (assocL [2] s7)            "((a*b)*~(a*b))=((a*b)*(~b*~a))"
+
+    //    e2 = (Mul (Inv (Var "a")) (Var "c"))
+    //    s9 = check (leibniz e2 "c" s8)        "(~a*((a*b)*~(a*b)))=(~a*((a*b)*(~b*~a)))"
     //    sa = check (assocR [1] s9)            "((~a*(a*b))*~(a*b))=(~a*((a*b)*(~b*~a)))"
     //    sb = check (assocR [1,1] sa)          "(((~a*a)*b)*~(a*b))=(~a*((a*b)*(~b*~a)))"
     //    sc = check (invElimL [1,1,1] sb)      "((e*b)*~(a*b))=(~a*((a*b)*(~b*~a)))"
     //    sd = check (identElimL [1,1] sc)      "(b*~(a*b))=(~a*((a*b)*(~b*~a)))"
+
     //    se = check (assocR [2] sd)            "(b*~(a*b))=((~a*(a*b))*(~b*~a))"
     //    sf = check (assocR [2,1] se)          "(b*~(a*b))=(((~a*a)*b)*(~b*~a))"
     //    sg = check (invElimL [2,1,1] sf)      "(b*~(a*b))=((e*b)*(~b*~a))"
     //    sh = check (identElimL [2,1] sg)      "(b*~(a*b))=(b*(~b*~a))"
-    //    si = check (leibniz e3 "c" sh)        "(~b*(b*~(a*b)))=(~b*(b*(~b*~a)))"  [by congruence of ... and mul(inv(B), C)]
+    //    e3 = (Mul (Inv (Var "b")) (Var "c"))
+    //    si = check (leibniz e3 "c" sh)        "(~b*(b*~(a*b)))=(~b*(b*(~b*~a)))"
     //    sj = check (assocR [1] si)            "((~b*b)*~(a*b))=(~b*(b*(~b*~a)))"
     //    sk = check (assocR [2] sj)            "((~b*b)*~(a*b))=((~b*b)*(~b*~a))"
     //    sl = check (invElimL [1,1] sk)        "(e*~(a*b))=((~b*b)*(~b*~a))"
     //    sm = check (invElimL [2,1] sl)        "(e*~(a*b))=(e*(~b*~a))"
     //    sn = check (identElimL [1] sm)        "~(a*b)=(e*(~b*~a))"
-    //    so = check (identElimL [2] sn)        "~(a*b)=(~b*~a)"
+    //    so = check (identElimL [2] sn)        "~(a*b)=(~b*~a)"qed
+
 qed
