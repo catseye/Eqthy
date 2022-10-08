@@ -1,6 +1,6 @@
 # TODO: these should probably come from a "eqthy.hints" module
 from eqthy.parser import Substitution, Congruence
-from eqthy.terms import Eqn, all_matches, subst, render, RewriteRule
+from eqthy.terms import Eqn, all_matches, subst, render, RewriteRule, Unifier
 
 
 class DerivationError(Exception):
@@ -35,20 +35,24 @@ class Verifier:
     def verify_theorem(self, theorem):
         self.log("Verifying theorem {}", render(theorem.eqn))
         prev = None
+        rewritten_eqn = None
         eqn_shown = False
         for step in theorem.steps:
             if prev is None:
                 self.log("Verifying that {} follows from established rules", render(step.eqn))
                 if step.eqn.lhs == step.eqn.rhs:
+                    rewritten_eqn = step.eqn
                     self.log("Confirmed that {} follows from Reflexivity", render(step.eqn))
                 else:
                     raise DerivationError("Could not derive {} from established rules".format(render(step.eqn)))
             else:
                 self.log("Verifying that {} follows from {}", render(step.eqn), render(prev.eqn))
-                if not self.obtain_rewritten_step(step, prev):
+                rewritten_eqn = self.obtain_rewritten_step(step, prev)
+                if not rewritten_eqn:
                     raise DerivationError("Could not derive {} from {}".format(render(step.eqn), render(prev.eqn)))
 
-            if step.eqn == theorem.eqn:
+            if rewritten_eqn == theorem.eqn:
+                self.log("We have now shown {} == {}".format(render(rewritten_eqn), render(theorem.eqn)))
                 eqn_shown = True
             prev = step
 
@@ -57,13 +61,24 @@ class Verifier:
 
     def obtain_rewritten_step(self, step, prev):
         if step.hint:
+            self.log("==> step has hint {}", step.hint)
             if isinstance(step.hint, Substitution):
-                raise NotImplementedError(step.hint)
+                unifier = Unifier(success=True, bindings={
+                    step.hint.variable: step.hint.term
+                })
+                # replace all occurrences of variable in step with term
+                rewritten_eqn = Eqn(
+                    subst(prev.eqn.lhs, unifier),
+                    subst(prev.eqn.rhs, unifier)
+                )
+                self.log("  Rewrote {} with Substitution to obtain: {}", render(prev.eqn), render(rewritten_eqn))
+                return rewritten_eqn
             elif isinstance(step.hint, Congruence):
                 raise NotImplementedError(step.hint)
             else:
-                # TODO we can only check that this hint is not inaccurate
+                # TODO do other checking on this hint instead of ignoring it
                 self.log("==> step has unacted-upon hint {}", step.hint)
+
         for rule in self.rules:
             self.log("  Trying to rewrite lhs {} with {}", render(prev.eqn.lhs), render(rule))
             for rewritten_lhs in self.all_rewrites(rule, prev.eqn.lhs):
