@@ -87,6 +87,21 @@ def subst(term, unifier):
         raise NotImplementedError(str(term))
 
 
+def subst_at_index(term, unifier, index):
+    if not unifier.success:
+        return term
+    if not index:
+        return subst(term, unifier)
+    if len(index) and isinstance(term, Term):
+        position = index[0]
+        new_subterm = subst_at_index(term.subterms[position], unifier, index[1:])
+        subterms = term.subterms[:]
+        subterms[position] = new_subterm
+        return Term(term.ctor, subterms)
+    else:
+        raise NotImplementedError('{} at {}'.format(str(term), index))
+
+
 def replace(term, target, replacement):
     if term == target:
         return replacement

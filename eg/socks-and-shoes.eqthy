@@ -7,12 +7,11 @@ theorem (#socks-and-shoes)
     inv(mul(A, B)) = mul(inv(B), inv(A))
 proof
     e = e
-    mul(A, inv(A)) = e                                 [by #inv on LHS]
+    mul(A, inv(A)) = e
     mul(mul(A, B), inv(mul(A, B))) = e                 [by substitution of mul(A, B) into A]
-    mul(mul(A, B), inv(mul(A, B))) = mul(A, inv(A))    [by #inv on RHS]
+    mul(mul(A, B), inv(mul(A, B))) = mul(A, inv(A))
+    mul(mul(A, B), inv(mul(A, B))) = mul(mul(A, e), inv(A))
 
-    //    s4 = check (invIntroR "a" [2] s3)     "((a*b)*~(a*b))=(a*~a)"
-    //    s5 = check (identIntroR [2,1] s4)     "((a*b)*~(a*b))=((a*e)*~a)"
     //    s6 = check (invIntroR "b" [2,1,2] s5) "((a*b)*~(a*b))=((a*(b*~b))*~a)"
     //    s7 = check (assocR [2,1] s6)          "((a*b)*~(a*b))=(((a*b)*~b)*~a)"
     //    s8 = check (assocL [2] s7)            "((a*b)*~(a*b))=((a*b)*(~b*~a))"
