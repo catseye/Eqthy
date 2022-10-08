@@ -1,6 +1,6 @@
 from collections import namedtuple
 
-from eqthy.scanner import Scanner, EqthySyntaxError
+from eqthy.scanner import Scanner
 from eqthy.terms import Term, Variable, Eqn
 
 
@@ -10,8 +10,8 @@ from eqthy.terms import Term, Variable, Eqn
 # Name    := "(" Ident ")".
 # Step    := Eqn ["[" "by" Hint "]"].
 # Hint    := "reflexivity"
-#          | "substitution" "of" Term "into" Term
-#          | "congruence" "of" Term "and" Term
+#          | "substitution" "of" Term "into" Var
+#          | "congruence" "of" Var "and" Term
 #          | Ident ["on" ("LHS" | "RHS")].
 # Eqn     := Term "=" Term.
 # Term    := Var | Ctor ["(" [Term {"," Term} ")"].
@@ -23,7 +23,7 @@ Theorem = namedtuple('Theorem', ['name', 'eqn', 'steps'])
 Step = namedtuple('Step', ['eqn', 'hint'])
 Reflexivity = namedtuple('Reflexivity', [])
 Substitution = namedtuple('Substitution', ['term', 'variable'])
-Congruence = namedtuple('Congruence', ['term', 'variable'])
+Congruence = namedtuple('Congruence', ['variable', 'term'])
 Reference = namedtuple('Reference', ['name', 'side'])
 
 
@@ -83,13 +83,13 @@ class Parser(object):
             self.scanner.expect('of')
             term = self.term()
             self.scanner.expect('into')
-            variable = self.term()
+            variable = self.var()
             return Substitution(term=term, variable=variable)
         elif self.scanner.consume('congruence'):
             self.scanner.expect('of')
-            term = self.term()
+            variable = self.var()
             self.scanner.expect('and')
-            variable = self.term()
+            term = self.term()
             return Congruence(term=term, variable=variable)
         else:
             name = self.scanner.token
@@ -100,7 +100,7 @@ class Parser(object):
                     side = self.scanner.token
                     self.scanner.scan()
                 else:
-                    raise EqthySyntaxError("Expected 'LHS' or 'RHS'")
+                    self.scanner.syntax_error("Expected 'LHS' or 'RHS'")
             return Reference(name=name, side=side)
 
     def eqn(self):
@@ -122,3 +122,9 @@ class Parser(object):
                     self.scanner.expect(',')
             self.scanner.expect(')')
         return Term(ctor=name, subterms=subterms)
+
+    def var(self):
+        var = self.term()
+        if not isinstance(var, Variable):
+            self.scanner.syntax_error("Expected variable")
+        return var

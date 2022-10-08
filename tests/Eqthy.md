@@ -111,6 +111,8 @@ Axioms and theorems can be named.
     qed
     ===> ok
 
+#### Hints
+
 Proof steps can use the "reflexivity" hint.
 
     axiom (idright) mul(A, e) = A
@@ -137,6 +139,20 @@ Proof steps can use the "substitution" hint.
     qed
     ===> ok
 
+In a substitution hint, the "into" part must name a variable.
+
+    axiom (idright) mul(A, e) = A
+    axiom (idleft)  mul(e, A) = A
+    axiom (assoc)   mul(A, mul(B, C)) = mul(mul(A, B), C)
+    theorem
+        mul(mul(e, B), e) = mul(e, B)
+    proof
+        A = A
+        mul(A, e) = A
+        mul(mul(e, B), e) = mul(e, B)   [by substitution of mul(e, B) into mul(e, e)]
+    qed
+    ???> Expected variable
+
 Proof steps can use the "congruence" hint.
 
     axiom (idright) mul(A, e) = A
@@ -150,3 +166,17 @@ Proof steps can use the "congruence" hint.
         mul(B, mul(A, e)) = mul(B, A)     [by congruence of A and mul(B, A)]
     qed
     ===> ok
+
+In a congruence hint, the first part must name a variable.
+
+    axiom (idright) mul(A, e) = A
+    axiom (idleft)  mul(e, A) = A
+    axiom (assoc)   mul(A, mul(B, C)) = mul(mul(A, B), C)
+    theorem
+        mul(B, mul(A, e)) = mul(B, A)
+    proof
+        A = A
+        mul(A, e) = A
+        mul(B, mul(A, e)) = mul(B, A)     [by congruence of mul(B, A) and A]
+    qed
+    ???> Expected variable

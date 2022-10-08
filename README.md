@@ -84,7 +84,7 @@ as it is sometimes not obvious what is being substituted where.
     e = e                                                [by reflexivity]
     mul(C, inv(C)) = e                                   [by #inverse on LHS]
     mul(mul(A, B), inv(mul(A, B))) = e                   [by substitution of mul(A, B) for C]
-    mul(A, mul(mul(A, B), inv(mul(A, B)))) = mul(A, e)   [by congruence of mul(A, B) and B]
+    mul(A, mul(mul(A, B), inv(mul(A, B)))) = mul(A, e)   [by congruence of B and mul(A, B)]
 
 Once the processor has resolved what rules were applies and checked that the proof is
 valid, it can _pretty-print_ an _annotated_ version of the input Eqthy document, one which

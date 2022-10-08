@@ -52,7 +52,7 @@ class Verifier:
                     raise DerivationError("Could not derive {} from {}".format(render(step.eqn), render(prev.eqn)))
 
             if rewritten_eqn == theorem.eqn:
-                self.log("We have now shown {} == {}".format(render(rewritten_eqn), render(theorem.eqn)))
+                self.log("With {} we have now shown the theorem {}".format(render(rewritten_eqn), render(theorem.eqn)))
                 eqn_shown = True
             prev = step
 
