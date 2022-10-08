@@ -1,17 +1,20 @@
 Eqthy
 =====
 
-**Eqthy** is a language for equational proofs.  It's similar to, but different from, the "calculational style"
-developed and popularized by Dijkstra et al.
+**Eqthy** is a language for equational proofs.  It's similar to, but
+different from, the "calculational style" developed and popularized by
+Dijkstra et al.
 
-This document is a sketch.  It describes the language.  It mentions some things a processor of the language
-might be expected to do.
+This document is a sketch.  It describes the language.  It mentions some
+things a processor of the language might be expected to do.
 
-An Eqthy document consists of any number of axioms and theorems.  Each axiom is an equation.
-An equation equates two terms.  Terms consist of constructors (also called function symbols)
-and variables.  Variables begin with uppercase letters.  Constructors begin with lowercase
-letters are followed by a list of zero or more subterms, enclosed in parentheses.
-If a term has no subterms, it is called an "atom" and the parentheses may be omitted.
+An Eqthy document consists of any number of axioms and theorems.  Each
+axiom is an equation.  An equation equates two terms.  Terms consist of
+constructors (also called function symbols) and variables.  Variables begin
+with uppercase letters.  Constructors begin with lowercase letters are
+followed by a list of zero or more subterms, enclosed in parentheses.  If a
+term has no subterms, it is called an "atom" and the parentheses may be
+omitted.
 
 Each axiom may optionally by named.  Here are some example axioms:
 
@@ -19,10 +22,21 @@ Each axiom may optionally by named.  Here are some example axioms:
     axiom (#id-left)  mul(e, A) = A
     axiom (#assoc)    mul(A, mul(B, C)) = mul(mul(A, B), C)
 
-A theorem gives an equation, followed by a sequence of equations that shows that the
-validitiy of the equation follows from the axioms and theorems previously given in
-the Eqthy document.  Each equation in the sequence is optionally followed by a hint,
-indicating what rule was used to derive it.
+A theorem gives an equation, followed by a sequence of equations that shows
+that the equation can be derived using the available means.  The available
+means are:
+
+*   the axioms that have been previously defined
+*   the theorems that have been previously proved
+*   the rules of inference of equational logic, which are
+    *    Reflexivity (A=A)
+    *    Transitivity (if A=B and B=C then A=C)
+    *    Substitution (if x(A)=y(A) then x(B)=y(B))
+    *    Congruence (if A=B then x(A)=x(B))
+
+The sequence of equations following a theorem is a proof.  Each equation in
+the proof is optionally annotated with a hint that follows it, indicating what
+axiom, theorem, or rule of inference was used to derive it.
 
     theorem (#id-comm)
         mul(A, e) = mul(e, A)
