@@ -113,17 +113,47 @@ Axioms and theorems can be named.
 
 #### Hints
 
-Proof steps can use the "reflexivity" hint.
+Proof steps can name the axiom being used in a hint written next to
+the step.
 
     axiom (idright) mul(A, e) = A
     axiom (idleft)  mul(e, A) = A
     axiom (assoc)   mul(A, mul(B, C)) = mul(mul(A, B), C)
-    theorem (refl)
-        A = A
+    theorem
+        A = mul(A, e)
     proof
-        A = A [by reflexivity]
+        A = A
+        A = mul(A, e)  [by idright]
     qed
     ===> ok
+
+Naming an axiom in a hint when the axiom used was not actually used there
+is incorrect.  It is reasonable to (at least) warn the user of this mistake.
+
+    axiom (idright) mul(A, e) = A
+    axiom (idleft)  mul(e, A) = A
+    axiom (assoc)   mul(A, mul(B, C)) = mul(mul(A, B), C)
+    theorem
+        A = mul(A, e)
+    proof
+        A = A
+        A = mul(A, e)  [by idleft]
+    qed
+    ???> waaaaa
+
+Using the reflexivity hint when the rule used was not actually reflexivity
+is incorrect.  It is reasonable to (at least) warn the user of this mistake.
+
+    axiom (idright) mul(A, e) = A
+    axiom (idleft)  mul(e, A) = A
+    axiom (assoc)   mul(A, mul(B, C)) = mul(mul(A, B), C)
+    theorem
+        A = mul(A, e)
+    proof
+        A = A
+        A = mul(A, e) [by reflexivity]
+    qed
+    ???> Incorrect hint
 
 Proof steps can use the "substitution" hint.
 
@@ -153,6 +183,20 @@ In a substitution hint, the "into" part must name a variable.
     qed
     ???> Expected variable
 
+Using the substitution hint when the rule used was not actually substitution
+is incorrect.  It is reasonable to (at least) warn the user of this mistake.
+
+    axiom (idright) mul(A, e) = A
+    axiom (idleft)  mul(e, A) = A
+    axiom (assoc)   mul(A, mul(B, C)) = mul(mul(A, B), C)
+    theorem
+        mul(A, e) = A
+    proof
+        A = A
+        mul(A, e) = A             [by substitution of mul(A, e) into A]
+    qed
+    ???> ok
+
 Proof steps can use the "congruence" hint.
 
     axiom (idright) mul(A, e) = A
@@ -180,3 +224,16 @@ In a congruence hint, the first part must name a variable.
         mul(B, mul(A, e)) = mul(B, A)     [by congruence of mul(B, A) and A]
     qed
     ???> Expected variable
+
+Using the congruence hint when the rule used was not actually substitution
+is incorrect.  It is reasonable to (at least) warn the user of this mistake.
+
+    axiom (idright) mul(A, e) = A
+    axiom (idleft)  mul(e, A) = A
+    axiom (assoc)   mul(A, mul(B, C)) = mul(mul(A, B), C)
+    theorem
+        mul(A, e) = A
+    proof
+        A = A
+        mul(A, e) = A             [by congruence of A and mul(A, e)]
+    ???> ok

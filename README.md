@@ -98,6 +98,5 @@ TODO
 *   Describe the supplied implementation(s)
 *   `[by previous_theorem]`
 *   Document the Syntax for Comments
-*   Is `#` supported/necessary?
-*   What happens when a hint is wrong but the step is still OK?
+*   Document status of `#` in names
 *   impl: show step number or line number when cannot derive next step
