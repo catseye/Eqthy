@@ -1,36 +1,36 @@
 Eqthy
 =====
 
-This document provides a number of example Eqthy sources in
+This document provides a number of example Eqthy document in
 Falderal format, in the hopes that they will help clarify
 the semantics of the language.
 For an overview of the language, see the README file.
 
-    -> Functionality "Parse Eqthy source" is implemented by shell command
+    -> Functionality "Parse Eqthy document" is implemented by shell command
     -> "python3 bin/eqthy --dump-ast %(test-body-file)"
 
-### Parse Eqthy Source
+### Parse Eqthy Document
 
-    -> Tests for functionality "Parse Eqthy source"
+    -> Tests for functionality "Parse Eqthy Document"
 
-This source is well-formed.  It will parse.
+This document is well-formed.  It will parse.
 
     axiom inv(A) = A
     ===> Development(axioms=[Axiom(name=None, eqn=Eqn(lhs=Term(ctor='inv', subterms=[Variable(name='A')]), rhs=Variable(name='A')))], theorems=[])
 
-This source is not well-formed.  It will not parse.
+This document is not well-formed.  It will not parse.
 
     axiom inv(A) .
     ???> Expected '=', but found '.'
 
-### Check Eqthy Source
+### Check Eqthy Document
 
-    -> Functionality "Check Eqthy source" is implemented by shell command
+    -> Functionality "Check Eqthy Document" is implemented by shell command
     -> "python3 bin/eqthy %(test-body-file) && echo 'ok'"
 
-    -> Tests for functionality "Check Eqthy source"
+    -> Tests for functionality "Check Eqthy Document"
 
-This source consists of some axioms and a theorem.
+This document consists of some axioms and a theorem.
 
     axiom mul(A, e) = A
     axiom mul(e, A) = A
