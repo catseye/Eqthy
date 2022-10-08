@@ -85,3 +85,12 @@ def subst(term, unifier):
         return Term(term.ctor, [subst(st, unifier) for st in term.subterms])
     else:
         raise NotImplementedError(str(term))
+
+
+def replace(term, target, replacement):
+    if term == target:
+        return replacement
+    elif isinstance(term, Term):
+        return Term(term.ctor, [replace(st, target, replacement) for st in term.subterms])
+    else:
+        return term

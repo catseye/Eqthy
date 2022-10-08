@@ -1,6 +1,6 @@
 # TODO: these should probably come from a "eqthy.hints" module
 from eqthy.parser import Substitution, Congruence
-from eqthy.terms import Eqn, all_matches, subst, render, RewriteRule, Unifier
+from eqthy.terms import Eqn, all_matches, subst, render, RewriteRule, replace
 
 
 class DerivationError(Exception):
@@ -63,15 +63,13 @@ class Verifier:
         if step.hint:
             self.log("==> step has hint {}", step.hint)
             if isinstance(step.hint, Substitution):
-                unifier = Unifier(success=True, bindings={
-                    step.hint.variable: step.hint.term
-                })
                 # replace all occurrences of variable in step with term
                 rewritten_eqn = Eqn(
-                    subst(prev.eqn.lhs, unifier),
-                    subst(prev.eqn.rhs, unifier)
+                    replace(prev.eqn.lhs, step.hint.variable, step.hint.term),
+                    replace(prev.eqn.rhs, step.hint.variable, step.hint.term)
                 )
                 self.log("  Rewrote {} with Substitution to obtain: {}", render(prev.eqn), render(rewritten_eqn))
+                assert rewritten_eqn == step.eqn
                 return rewritten_eqn
             elif isinstance(step.hint, Congruence):
                 raise NotImplementedError(step.hint)
