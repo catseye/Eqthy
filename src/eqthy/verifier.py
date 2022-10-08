@@ -71,6 +71,7 @@ class Verifier:
         for rule in self.rules:
             self.log("  Trying to rewrite lhs {} with {}", render(prev.eqn.lhs), render(rule))
             for rewritten_lhs in self.all_rewrites(rule, prev.eqn.lhs):
+                self.log("    Using {}, rewrote {} to {}", render(rule), render(prev.eqn.lhs), render(rewritten_lhs))
                 rewritten_eqn = Eqn(rewritten_lhs, prev.eqn.rhs)
                 if step.eqn == rewritten_eqn:
                     self.log("    Can rewrite lhs to obtain: {}", render(rewritten_eqn))

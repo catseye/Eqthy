@@ -9,6 +9,7 @@ theorem (#product-of-semigroup-element-with-right-inverse-is-idempotent)
 proof
     mul(inv(A), A) = mul(inv(A), A)
     mul(mul(inv(A), e), A) = mul(inv(A), A)
-    mul(mul(inv(A), mul(A, inv(A)), A)) = mul(inv(A), A)
+    mul(mul(inv(A), mul(A, inv(A))), A) = mul(inv(A), A)
+    mul(mul(mul(inv(A), A), inv(A)), A) = mul(inv(A), A)
     mul(mul(inv(A), A), mul(inv(A), A)) = mul(inv(A), A)
 qed

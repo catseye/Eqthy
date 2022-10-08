@@ -100,4 +100,3 @@ TODO
 *   Document the Syntax for Comments
 *   Document status of `#` in names
 *   impl: show step number or line number when cannot derive next step
-*   Trying to rewrite lhs mul(mul(inv(A), e), A) with e => mul(A, inv(A)) is nada, why?
