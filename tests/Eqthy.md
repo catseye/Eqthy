@@ -9,6 +9,8 @@ For an overview of the language, see the README file.
     -> Functionality "Parse Eqthy source" is implemented by shell command
     -> "python3 bin/eqthy --dump-ast %(test-body-file)"
 
+### Parse Eqthy Source
+
     -> Tests for functionality "Parse Eqthy source"
 
 This source is well-formed.  It will parse.
@@ -20,6 +22,8 @@ This source is not well-formed.  It will not parse.
 
     axiom inv(A) .
     ???> Expected '=', but found '.'
+
+### Check Eqthy Source
 
     -> Functionality "Check Eqthy source" is implemented by shell command
     -> "python3 bin/eqthy %(test-body-file) && echo 'ok'"
