@@ -91,3 +91,13 @@ valid, it can _pretty-print_ an _annotated_ version of the input Eqthy document,
 includes all of the hints that it inferred.  This pretty-printed document can be checked
 again in the future, and more efficiently, as all the searches for hints have been
 already performed.
+
+TODO
+----
+
+*   Describe the supplied implementation(s)
+*   `[by previous_theorem]`
+*   Document the Syntax for Comments
+*   Is `#` supported/necessary?
+*   What happens when a hint is wrong but the step is still OK?
+*   impl: show step number or line number when cannot derive next step

@@ -1,0 +1,35 @@
+axiom (#id-right) mul(A, e) = A
+axiom (#id-left)  mul(e, A) = A
+axiom (#assoc)    mul(A, mul(B, C)) = mul(mul(A, B), C)
+axiom (#inv)      mul(A, inv(A)) = e
+
+theorem (#socks-and-shoes)
+    inv(mul(A, B)) = mul(inv(B), inv(A))
+proof
+    e = e
+    mul(A, inv(A)) = e                                 [by #inv on LHS]
+    mul(mul(A, B), inv(mul(A, B))) = e                 [by substitution of mul(A, B) into A]
+    mul(mul(A, B), inv(mul(A, B))) = mul(A, inv(A))    [by #inv on RHS]
+
+    //    s4 = check (invIntroR "a" [2] s3)     "((a*b)*~(a*b))=(a*~a)"
+    //    s5 = check (identIntroR [2,1] s4)     "((a*b)*~(a*b))=((a*e)*~a)"
+    //    s6 = check (invIntroR "b" [2,1,2] s5) "((a*b)*~(a*b))=((a*(b*~b))*~a)"
+    //    s7 = check (assocR [2,1] s6)          "((a*b)*~(a*b))=(((a*b)*~b)*~a)"
+    //    s8 = check (assocL [2] s7)            "((a*b)*~(a*b))=((a*b)*(~b*~a))"
+    //    s9 = check (leibniz e2 "c" s8)        "(~a*((a*b)*~(a*b)))=(~a*((a*b)*(~b*~a)))"  [by congruence of ... and mul(inv(A), C)]
+    //    sa = check (assocR [1] s9)            "((~a*(a*b))*~(a*b))=(~a*((a*b)*(~b*~a)))"
+    //    sb = check (assocR [1,1] sa)          "(((~a*a)*b)*~(a*b))=(~a*((a*b)*(~b*~a)))"
+    //    sc = check (invElimL [1,1,1] sb)      "((e*b)*~(a*b))=(~a*((a*b)*(~b*~a)))"
+    //    sd = check (identElimL [1,1] sc)      "(b*~(a*b))=(~a*((a*b)*(~b*~a)))"
+    //    se = check (assocR [2] sd)            "(b*~(a*b))=((~a*(a*b))*(~b*~a))"
+    //    sf = check (assocR [2,1] se)          "(b*~(a*b))=(((~a*a)*b)*(~b*~a))"
+    //    sg = check (invElimL [2,1,1] sf)      "(b*~(a*b))=((e*b)*(~b*~a))"
+    //    sh = check (identElimL [2,1] sg)      "(b*~(a*b))=(b*(~b*~a))"
+    //    si = check (leibniz e3 "c" sh)        "(~b*(b*~(a*b)))=(~b*(b*(~b*~a)))"  [by congruence of ... and mul(inv(B), C)]
+    //    sj = check (assocR [1] si)            "((~b*b)*~(a*b))=(~b*(b*(~b*~a)))"
+    //    sk = check (assocR [2] sj)            "((~b*b)*~(a*b))=((~b*b)*(~b*~a))"
+    //    sl = check (invElimL [1,1] sk)        "(e*~(a*b))=((~b*b)*(~b*~a))"
+    //    sm = check (invElimL [2,1] sl)        "(e*~(a*b))=(e*(~b*~a))"
+    //    sn = check (identElimL [1] sm)        "~(a*b)=(e*(~b*~a))"
+    //    so = check (identElimL [2] sn)        "~(a*b)=(~b*~a)"
+qed
