@@ -2,6 +2,7 @@ axiom (#id-right) mul(A, e) = A
 axiom (#id-left)  mul(e, A) = A
 axiom (#assoc)    mul(A, mul(B, C)) = mul(mul(A, B), C)
 axiom (#inv)      mul(A, inv(A)) = e
+axiom (#invB)     mul(B, inv(B)) = e
 
 theorem (#socks-and-shoes)
     inv(mul(A, B)) = mul(inv(B), inv(A))
@@ -11,10 +12,10 @@ proof
     mul(mul(A, B), inv(mul(A, B))) = e                 [by substitution of mul(A, B) into A]
     mul(mul(A, B), inv(mul(A, B))) = mul(A, inv(A))
     mul(mul(A, B), inv(mul(A, B))) = mul(mul(A, e), inv(A))
+    mul(mul(A, B), inv(mul(A, B))) = mul(mul(A, mul(B, inv(B))), inv(A))
+    mul(mul(A, B), inv(mul(A, B))) = mul(mul(mul(A, B), inv(B)), inv(A))
+    mul(mul(A, B), inv(mul(A, B))) = mul(mul(A, B), mul(inv(B), inv(A)))
 
-    //    s6 = check (invIntroR "b" [2,1,2] s5) "((a*b)*~(a*b))=((a*(b*~b))*~a)"
-    //    s7 = check (assocR [2,1] s6)          "((a*b)*~(a*b))=(((a*b)*~b)*~a)"
-    //    s8 = check (assocL [2] s7)            "((a*b)*~(a*b))=((a*b)*(~b*~a))"
     //    s9 = check (leibniz e2 "c" s8)        "(~a*((a*b)*~(a*b)))=(~a*((a*b)*(~b*~a)))"  [by congruence of ... and mul(inv(A), C)]
     //    sa = check (assocR [1] s9)            "((~a*(a*b))*~(a*b))=(~a*((a*b)*(~b*~a)))"
     //    sb = check (assocR [1,1] sa)          "(((~a*a)*b)*~(a*b))=(~a*((a*b)*(~b*~a)))"
