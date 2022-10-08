@@ -72,7 +72,14 @@ class Verifier:
                 assert rewritten_eqn == step.eqn
                 return rewritten_eqn
             elif isinstance(step.hint, Congruence):
-                raise NotImplementedError(step.hint)
+                # replace all occurrences of variable in hint with step
+                rewritten_eqn = Eqn(
+                    replace(step.hint.term, step.hint.variable, prev.eqn.lhs),
+                    replace(step.hint.term, step.hint.variable, prev.eqn.rhs)
+                )
+                self.log("  Rewrote {} with Congruence to obtain: {}", render(prev.eqn), render(rewritten_eqn))
+                assert rewritten_eqn == step.eqn
+                return rewritten_eqn
             else:
                 # TODO do other checking on this hint instead of ignoring it
                 self.log("==> step has unacted-upon hint {}", step.hint)
