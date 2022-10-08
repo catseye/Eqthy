@@ -153,7 +153,7 @@ is incorrect.  It is reasonable to (at least) warn the user of this mistake.
         A = A
         A = mul(A, e) [by reflexivity]
     qed
-    ???> Incorrect hint
+    ???> Reflexivity
 
 Proof steps can use the "substitution" hint.
 
@@ -195,7 +195,7 @@ is incorrect.  It is reasonable to (at least) warn the user of this mistake.
         A = A
         mul(A, e) = A             [by substitution of mul(A, e) into A]
     qed
-    ???> ok
+    ???> Substitution
 
 Proof steps can use the "congruence" hint.
 
@@ -236,4 +236,5 @@ is incorrect.  It is reasonable to (at least) warn the user of this mistake.
     proof
         A = A
         mul(A, e) = A             [by congruence of A and mul(A, e)]
-    ???> ok
+    qed
+    ???> Congruence

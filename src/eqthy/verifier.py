@@ -1,5 +1,5 @@
 # TODO: these should probably come from a "eqthy.hints" module
-from eqthy.parser import Substitution, Congruence
+from eqthy.parser import Reflexivity, Substitution, Congruence
 from eqthy.terms import Eqn, all_matches, expand, subterm_at_index, update_at_index, render, RewriteRule, replace
 
 
@@ -60,29 +60,13 @@ class Verifier:
             raise DerivationError("No step in proof showed {}".format(render(theorem.eqn)))
 
     def obtain_rewritten_step(self, step, prev):
-        if step.hint:
+        if step.hint is not None:
             self.log("==> step has hint {}", step.hint)
-            if isinstance(step.hint, Substitution):
-                # replace all occurrences of variable in step with term
-                rewritten_eqn = Eqn(
-                    replace(prev.eqn.lhs, step.hint.variable, step.hint.term),
-                    replace(prev.eqn.rhs, step.hint.variable, step.hint.term)
-                )
-                self.log("  Rewrote {} with Substitution to obtain: {}", render(prev.eqn), render(rewritten_eqn))
-                assert rewritten_eqn == step.eqn
-                return rewritten_eqn
-            elif isinstance(step.hint, Congruence):
-                # replace all occurrences of variable in hint with step
-                rewritten_eqn = Eqn(
-                    replace(step.hint.term, step.hint.variable, prev.eqn.lhs),
-                    replace(step.hint.term, step.hint.variable, prev.eqn.rhs)
-                )
-                self.log("  Rewrote {} with Congruence to obtain: {}", render(prev.eqn), render(rewritten_eqn))
-                assert rewritten_eqn == step.eqn
-                return rewritten_eqn
-            else:
-                # TODO do other checking on this hint instead of ignoring it
-                self.log("==> step has unacted-upon hint {}", step.hint)
+            result = self.resolve_step_hint(step, prev)
+            if result:
+                return result
+
+        # if no hint or hint resolution punted, search for rule to apply
 
         for rule in self.rules:
             self.log("  Trying to rewrite lhs {} with {}", render(prev.eqn.lhs), render(rule))
@@ -100,6 +84,36 @@ class Verifier:
                     self.log("    Can rewrite rhs to obtain: {}", render(rewritten_eqn))
                     return rewritten_eqn
 
+    def resolve_step_hint(self, step, prev):
+        if isinstance(step.hint, Substitution):
+            # replace all occurrences of variable in step with term
+            rewritten_eqn = Eqn(
+                replace(prev.eqn.lhs, step.hint.variable, step.hint.term),
+                replace(prev.eqn.rhs, step.hint.variable, step.hint.term)
+            )
+            self.log("  Rewrote {} with Substitution to obtain: {}", render(prev.eqn), render(rewritten_eqn))
+            if rewritten_eqn != step.eqn:
+                raise DerivationError("Substitution did not result in {}".format(render(step.eqn)))
+            return rewritten_eqn
+        elif isinstance(step.hint, Congruence):
+            # replace all occurrences of variable in hint with step
+            rewritten_eqn = Eqn(
+                replace(step.hint.term, step.hint.variable, prev.eqn.lhs),
+                replace(step.hint.term, step.hint.variable, prev.eqn.rhs)
+            )
+            self.log("  Rewrote {} with Congruence to obtain: {}", render(prev.eqn), render(rewritten_eqn))
+            if rewritten_eqn != step.eqn:
+                raise DerivationError("Congruence did not result in {}".format(render(step.eqn)))
+            return rewritten_eqn
+        elif isinstance(step.hint, Reflexivity):
+            if step.eqn.lhs == step.eqn.rhs:
+                return step.eqn
+            else:
+                raise DerivationError("Could not derive {} from Reflexivity".format(render(step.eqn)))
+        else:
+            # TODO do other checking on this hint instead of ignoring it
+            self.log("==> step has unacted-upon hint {}", step.hint)
+
     def all_rewrites(self, rule, term):
         """Given a term, and a rule, return a list of the terms that would result
         from rewriting the term in all the possible ways by the rule."""
@@ -109,11 +123,9 @@ class Verifier:
 
         # Now, collect all the rewritten terms -- a subterm replaced by the expanded rhs of the rule
         rewrites = []
-        # self.log('////////////// {} matched by: {} //////', render(term), render(rule))
         for (index, unifier) in matches:
             rewritten_subterm = expand(rule.substitution, unifier)
             result = update_at_index(term, rewritten_subterm, index)
-            # self.log("// at {}, unifier is {}, rewritten_subterm is {}, result is {}", index, render(unifier), render(rewritten_subterm), render(result))
             rewrites.append(result)
 
         return rewrites
