@@ -1,6 +1,6 @@
 # TODO: these should probably come from a "eqthy.hints" module
 from eqthy.parser import Substitution, Congruence
-from eqthy.terms import Eqn, all_matches, subst, subst_at_index, render, RewriteRule, replace
+from eqthy.terms import Eqn, all_matches, subst_at_index, subterm_at_index, render, RewriteRule, replace
 
 
 class DerivationError(Exception):
@@ -103,6 +103,9 @@ class Verifier:
     def all_rewrites(self, rule, term):
         matches = all_matches(rule.pattern, term)
         rewrites = []
+        self.log('//////////////')
+        for (index, unifier) in matches:
+            self.log("// {} at {} is {} : {}", render(term), index, render(subterm_at_index(term, index)), render(unifier))
         for (index, unifier) in matches:
             rewrites.append(subst_at_index(rule.substitution, unifier, index))
         return rewrites

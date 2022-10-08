@@ -25,6 +25,11 @@ def render(t):
         return "{} = {}".format(render(t.lhs), render(t.rhs))
     elif isinstance(t, RewriteRule):
         return "{} => {}".format(render(t.pattern), render(t.substitution))
+    elif isinstance(t, Unifier):
+        if not t.success:
+            return '#F'
+        else:
+            return str(dict([(k, render(v)) for k, v in t.bindings.items()]))
     else:
         return str(t)
 
@@ -87,6 +92,16 @@ def subst(term, unifier):
         raise NotImplementedError(str(term))
 
 
+def subterm_at_index(term, index):
+    if not index:
+        return term
+    if len(index) and isinstance(term, Term):
+        position = index[0]
+        return subterm_at_index(term.subterms[position], index[1:])
+    else:
+        raise KeyError('{} at {}'.format(str(term), index))
+
+
 def subst_at_index(term, unifier, index):
     if not unifier.success:
         return term
@@ -99,7 +114,7 @@ def subst_at_index(term, unifier, index):
         subterms[position] = new_subterm
         return Term(term.ctor, subterms)
     else:
-        raise NotImplementedError('{} at {}'.format(str(term), index))
+        raise KeyError('{} at {}'.format(str(term), index))
 
 
 def replace(term, target, replacement):
