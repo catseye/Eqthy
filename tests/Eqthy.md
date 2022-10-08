@@ -6,7 +6,7 @@ Falderal format, in the hopes that they will help clarify
 the semantics of the language.
 For an overview of the language, see the README file.
 
-    -> Functionality "Parse Eqthy document" is implemented by shell command
+    -> Functionality "Parse Eqthy Document" is implemented by shell command
     -> "python3 bin/eqthy --dump-ast %(test-body-file)"
 
 ### Parse Eqthy Document
@@ -120,5 +120,33 @@ Proof steps can use the "reflexivity" hint.
         A = A
     proof
         A = A [by reflexivity]
+    qed
+    ===> ok
+
+Proof steps can use the "substitution" hint.
+
+    axiom (idright) mul(A, e) = A
+    axiom (idleft)  mul(e, A) = A
+    axiom (assoc)   mul(A, mul(B, C)) = mul(mul(A, B), C)
+    theorem
+        mul(mul(e, B), e) = mul(e, B)
+    proof
+        A = A
+        mul(A, e) = A
+        mul(mul(e, B), e) = mul(e, B)   [by substitution of mul(e, B) into A]
+    qed
+    ===> ok
+
+Proof steps can use the "congruence" hint.
+
+    axiom (idright) mul(A, e) = A
+    axiom (idleft)  mul(e, A) = A
+    axiom (assoc)   mul(A, mul(B, C)) = mul(mul(A, B), C)
+    theorem
+        mul(mul(e, B), e) = mul(e, mul(e, B))
+    proof
+        A = A
+        mul(A, e) = A
+        mul(B, mul(A, e)) = mul(B, A)     [by congruence of A and mul(B, A)]
     qed
     ===> ok
