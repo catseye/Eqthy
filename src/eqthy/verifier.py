@@ -1,3 +1,5 @@
+# TODO: these should probably come from a "eqthy.hints" module
+from eqthy.parser import Substitution, Congruence
 from eqthy.terms import Eqn, all_matches, subst, render, RewriteRule
 
 
@@ -55,8 +57,13 @@ class Verifier:
 
     def obtain_rewritten_step(self, step, prev):
         if step.hint:
-            # TODO: if name of rule given in hint, use that rule only
-            self.log("==> step has hint {}", step.hint)
+            if isinstance(step.hint, Substitution):
+                raise NotImplementedError(step.hint)
+            elif isinstance(step.hint, Congruence):
+                raise NotImplementedError(step.hint)
+            else:
+                # TODO we can only check that this hint is not inaccurate
+                self.log("==> step has unacted-upon hint {}", step.hint)
         for rule in self.rules:
             self.log("  Trying to rewrite lhs {} with {}", render(prev.eqn.lhs), render(rule))
             for rewritten_lhs in self.all_rewrites(rule, prev.eqn.lhs):

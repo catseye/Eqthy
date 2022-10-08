@@ -143,7 +143,7 @@ Proof steps can use the "congruence" hint.
     axiom (idleft)  mul(e, A) = A
     axiom (assoc)   mul(A, mul(B, C)) = mul(mul(A, B), C)
     theorem
-        mul(mul(e, B), e) = mul(e, mul(e, B))
+        mul(B, mul(A, e)) = mul(B, A)
     proof
         A = A
         mul(A, e) = A

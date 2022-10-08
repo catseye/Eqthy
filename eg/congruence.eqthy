@@ -1,0 +1,10 @@
+axiom (idright) mul(A, e) = A
+axiom (idleft)  mul(e, A) = A
+axiom (assoc)   mul(A, mul(B, C)) = mul(mul(A, B), C)
+theorem
+    mul(B, mul(A, e)) = mul(B, A)
+proof
+    A = A
+    mul(A, e) = A
+    mul(B, mul(A, e)) = mul(B, A)     [by congruence of A and mul(B, A)]
+qed
