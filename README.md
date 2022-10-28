@@ -29,6 +29,11 @@ in Eqthy would be to check it for validity.
 This distribution contains such a proof checker, written in Python 3.
 The source code for it can be found in the [src/](src/) directory.
 
+The core module that does proof checking, [eqthy.verifier](src/eqthy/verifier.py),
+is less than 200 lines in length, despite having many logging statements.
+The hope is to make it as un-intimidating as possible to investigate
+and understand its behaviour.
+
 TODO
 ----
 

@@ -105,7 +105,7 @@ the semantics of the language.
 This document is well-formed.  It will parse.
 
     axiom inv(A) = A
-    ===> Development(axioms=[Axiom(name=None, eqn=Eqn(lhs=Term(ctor='inv', subterms=[Variable(name='A')]), rhs=Variable(name='A')))], theorems=[])
+    ===> Development(axioms=[Axiom(name='unnamed_axiom_1', eqn=Eqn(lhs=Term(ctor='inv', subterms=[Variable(name='A')]), rhs=Variable(name='A')))], theorems=[])
 
 This document is not well-formed.  It will not parse.
 

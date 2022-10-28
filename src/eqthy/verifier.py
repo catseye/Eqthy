@@ -12,13 +12,13 @@ class Verifier:
         self.axioms = development.axioms
         self.theorems = development.theorems
         self.verbose = verbose
-        self.rules = []
+        self.rules = {}
 
         for axiom in self.axioms:
             lhs = axiom.eqn.lhs
             rhs = axiom.eqn.rhs
-            self.rules.append(RewriteRule(pattern=lhs, substitution=rhs))
-            self.rules.append(RewriteRule(pattern=rhs, substitution=lhs))
+            self.rules[axiom.name + '_1'] = RewriteRule(pattern=lhs, substitution=rhs)
+            self.rules[axiom.name + '_2'] = RewriteRule(pattern=rhs, substitution=lhs)
 
     def log(self, msg, *args):
         if self.verbose:
@@ -26,11 +26,12 @@ class Verifier:
 
     def verify(self):
         for theorem in self.theorems:
+            self.log("Verifying theorem named {}", render(theorem.name))
             self.verify_theorem(theorem)
             lhs = theorem.eqn.lhs
             rhs = theorem.eqn.rhs
-            self.rules.append(RewriteRule(pattern=lhs, substitution=rhs))
-            self.rules.append(RewriteRule(pattern=rhs, substitution=lhs))
+            self.rules[theorem.name + '_1'] = RewriteRule(pattern=lhs, substitution=rhs)
+            self.rules[theorem.name + '_2'] = RewriteRule(pattern=rhs, substitution=lhs)
 
     def verify_theorem(self, theorem):
         self.log("Verifying theorem {}", render(theorem.eqn))
@@ -63,13 +64,16 @@ class Verifier:
         rules_to_try = self.rules
         if step.hint is not None:
             self.log("==> step has hint {}", step.hint)
-            result = self.resolve_step_hint(step, prev, rules_to_try)
+            result = self.resolve_step_hint(step, prev)
             if result:
                 return result
+            result = self.narrow_rule_search(step)
+            if result:
+                rules_to_try = result
 
         # if no hint or hint resolution punted, search for rule to apply
 
-        for rule in rules_to_try:
+        for (name, rule) in rules_to_try.items():
             self.log("  Trying to rewrite lhs {} with {}", render(prev.eqn.lhs), render(rule))
             for rewritten_lhs in self.all_rewrites(rule, prev.eqn.lhs):
                 self.log("    Using {}, rewrote {} to {}", render(rule), render(prev.eqn.lhs), render(rewritten_lhs))
@@ -86,8 +90,7 @@ class Verifier:
                     self.log("    Can rewrite rhs to obtain: {}", render(rewritten_eqn))
                     return rewritten_eqn
 
-    def resolve_step_hint(self, step, prev, rules_to_try):
-        """`rules_to_try` is passed by reference, expected to perhaps be modified"""
+    def resolve_step_hint(self, step, prev):
         if isinstance(step.hint, Substitution):
             # replace all occurrences of variable in step with term
             rewritten_eqn = Eqn(
@@ -113,11 +116,11 @@ class Verifier:
                 return step.eqn
             else:
                 raise DerivationError("Could not derive {} from Reflexivity".format(render(step.eqn)))
-        elif isinstance(step.hint, Reference):
-            # TODO: narrow down rules_to_try
+
+    def narrow_rule_search(self, step):
+        if isinstance(step.hint, Reference):
+            # TODO: return narrowed down search
             return None
-        else:
-            raise NotImplementedError(str(step.hint))
 
     def all_rewrites(self, rule, term):
         """Given a term, and a rule, return a list of the terms that would result

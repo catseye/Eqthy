@@ -30,6 +30,8 @@ Reference = namedtuple('Reference', ['name', 'side'])
 class Parser(object):
     def __init__(self, text, filename):
         self.scanner = Scanner(text, filename)
+        self.axiom_count = 0
+        self.theorem_count = 0
 
     def development(self):
         axioms = []
@@ -44,6 +46,9 @@ class Parser(object):
         self.scanner.expect('axiom')
         name = self.name()
         eqn = self.eqn()
+        if not name:
+            self.axiom_count += 1
+            name = 'unnamed_axiom_{}'.format(self.axiom_count)
         return Axiom(name=name, eqn=eqn)
 
     def theorem(self):
@@ -55,6 +60,9 @@ class Parser(object):
         while not self.scanner.on('qed'):
             steps.append(self.step())
         self.scanner.expect('qed')
+        if not name:
+            self.theorem_count += 1
+            name = 'unnamed_theorem_{}'.format(self.theorem_count)
         return Theorem(name=name, eqn=eqn, steps=steps)
 
     def name(self):
