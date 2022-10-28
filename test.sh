@@ -1,4 +1,3 @@
 #!/bin/sh
 
-falderal tests/*.md || exit 1
-
+falderal doc/*.md || exit 1
