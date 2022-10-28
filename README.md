@@ -20,7 +20,7 @@ Here is an example of what an Eqthy proof looks like:
     qed
 
 For a fuller description of the language, including a set of Falderal
-tests, see [doc/Eqthy.md](doc/Eqthy.md).
+tests, see **[doc/Eqthy.md](doc/Eqthy.md)**.
 
 The language does not prescribe any specific usage but it is expected
 that one of the main reasons for a computer to read a proof written
@@ -32,6 +32,10 @@ The source code for it can be found in the [src/](src/) directory.
 TODO
 ----
 
-*   `[by previous_theorem]`
+*   Reference hints (`[by axiom-or-theorem]`) should narrow down
+    search space.  We need a data structure that stores the names of
+    axioms and theorems for this to be meaningful
 *   Document the Syntax for Comments
-*   impl: show step number or line number when cannot derive next step
+*   Show the step number or line number when cannot derive next step
+*   Allow rules to be instantiated with variable names other than the
+    ones that are specified in the rule

@@ -1,5 +1,5 @@
 # TODO: these should probably come from a "eqthy.hints" module
-from eqthy.parser import Reflexivity, Substitution, Congruence
+from eqthy.parser import Reflexivity, Substitution, Congruence, Reference
 from eqthy.terms import Eqn, all_matches, expand, subterm_at_index, update_at_index, render, RewriteRule, replace
 
 
@@ -60,15 +60,16 @@ class Verifier:
             raise DerivationError("No step in proof showed {}".format(render(theorem.eqn)))
 
     def obtain_rewritten_step(self, step, prev):
+        rules_to_try = self.rules
         if step.hint is not None:
             self.log("==> step has hint {}", step.hint)
-            result = self.resolve_step_hint(step, prev)
+            result = self.resolve_step_hint(step, prev, rules_to_try)
             if result:
                 return result
 
         # if no hint or hint resolution punted, search for rule to apply
 
-        for rule in self.rules:
+        for rule in rules_to_try:
             self.log("  Trying to rewrite lhs {} with {}", render(prev.eqn.lhs), render(rule))
             for rewritten_lhs in self.all_rewrites(rule, prev.eqn.lhs):
                 self.log("    Using {}, rewrote {} to {}", render(rule), render(prev.eqn.lhs), render(rewritten_lhs))
@@ -85,7 +86,8 @@ class Verifier:
                     self.log("    Can rewrite rhs to obtain: {}", render(rewritten_eqn))
                     return rewritten_eqn
 
-    def resolve_step_hint(self, step, prev):
+    def resolve_step_hint(self, step, prev, rules_to_try):
+        """`rules_to_try` is passed by reference, expected to perhaps be modified"""
         if isinstance(step.hint, Substitution):
             # replace all occurrences of variable in step with term
             rewritten_eqn = Eqn(
@@ -111,9 +113,11 @@ class Verifier:
                 return step.eqn
             else:
                 raise DerivationError("Could not derive {} from Reflexivity".format(render(step.eqn)))
+        elif isinstance(step.hint, Reference):
+            # TODO: narrow down rules_to_try
+            return None
         else:
-            # TODO do other checking on this hint instead of ignoring it
-            self.log("==> step has unacted-upon hint {}", step.hint)
+            raise NotImplementedError(str(step.hint))
 
     def all_rewrites(self, rule, term):
         """Given a term, and a rule, return a list of the terms that would result
