@@ -96,7 +96,7 @@ Falderal format, in the hopes that they will help clarify
 the semantics of the language.
 
     -> Functionality "Parse Eqthy Document" is implemented by shell command
-    -> "python3 bin/eqthy --dump-ast %(test-body-file)"
+    -> "python3 bin/eqthy --dump-ast %(test-body-file) 2>&1 > /dev/null && echo 'ok'"
 
 ### Parse Eqthy Document
 
@@ -105,12 +105,19 @@ the semantics of the language.
 This document is well-formed.  It will parse.
 
     axiom inv(A) = A
-    ===> Development(axioms=[Axiom(name='unnamed_axiom_1', eqn=Eqn(lhs=Term(ctor='inv', subterms=[Variable(name='A')]), rhs=Variable(name='A')))], theorems=[])
+    ===> ok
 
 This document is not well-formed.  It will not parse.
 
     axiom inv(A) .
     ???> Expected '=', but found '.'
+
+Comments are introduced with the symbol sequence `//`.  They extend
+until the end of the line.
+
+    // This is a comment.
+    axiom inv(A) = A  // This is also a comment.
+    ===> ok
 
 ### Check Eqthy Document
 
