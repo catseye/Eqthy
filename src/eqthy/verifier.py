@@ -119,8 +119,12 @@ class Verifier:
 
     def narrow_rule_search(self, step):
         if isinstance(step.hint, Reference):
-            # TODO: return narrowed down search
-            return None
+            if step.hint.name + '_1' not in self.rules:
+                raise DerivationError("Rule named {} has not been established".format(step.hint.name))
+            rules = {}
+            rules[step.hint.name + '_1'] = self.rules[step.hint.name + '_1']
+            rules[step.hint.name + '_2'] = self.rules[step.hint.name + '_2']
+            return rules
 
     def all_rewrites(self, rule, term):
         """Given a term, and a rule, return a list of the terms that would result

@@ -241,16 +241,16 @@ the step.
 Naming an axiom in a hint when the axiom used was not actually used there
 is incorrect.  It is reasonable to (at least) warn the user of this mistake.
 
-    > axiom (idright) mul(A, e) = A
-    > axiom (idleft)  mul(e, A) = A
-    > axiom (assoc)   mul(A, mul(B, C)) = mul(mul(A, B), C)
-    > theorem
-    >     A = mul(A, e)
-    > proof
-    >     A = A
-    >     A = mul(A, e)  [by idleft]
-    > qed
-    > ???> waaaaa
+    axiom (idright) mul(A, e) = A
+    axiom (idleft)  mul(e, A) = A
+    axiom (assoc)   mul(A, mul(B, C)) = mul(mul(A, B), C)
+    theorem
+        A = mul(A, e)
+    proof
+        A = A
+        A = mul(A, e)  [by idleft]
+    qed
+    ???> Could not derive A = mul(A, e) from A = A
 
 Using the reflexivity hint when the rule used was not actually reflexivity
 is incorrect.  It is reasonable to (at least) warn the user of this mistake.

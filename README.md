@@ -46,8 +46,9 @@ and understanding its behaviour as un-intimidating as possible.
 TODO
 ----
 
-*   Reference hints (`[by axiom-or-theorem]`) should narrow down
-    search space.
+*   Handle "on LHS", "on RHS" in hints.
+*   Demonstrate multiple theorems, and that previous theorems can be used
+    as justifications in proof steps.
 *   Show the step number or line number in the error message when
     there is a derivation error.
 *   Allow rules to be instantiated with variable names other than the
