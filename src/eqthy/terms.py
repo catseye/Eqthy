@@ -122,3 +122,21 @@ def replace(term, target, replacement):
         return Term(term.ctor, [replace(st, target, replacement) for st in term.subterms])
     else:
         return term
+
+
+def all_rewrites(pattern, substitution, term):
+    """Given a term, and a rule (a pattern and a substitution), return
+    a list of the terms that would result from rewriting the term
+    in all the possible ways by the rule."""
+
+    # First, obtain all the unifiers where the pattern of the rule matches any subterm of the term
+    matches = all_matches(pattern, term)
+
+    # Now, collect all the rewritten terms -- a subterm replaced by the expanded rhs of the rule
+    rewrites = []
+    for (index, unifier) in matches:
+        rewritten_subterm = expand(substitution, unifier)
+        result = update_at_index(term, rewritten_subterm, index)
+        rewrites.append(result)
+
+    return rewrites

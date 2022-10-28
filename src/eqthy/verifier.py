@@ -1,6 +1,6 @@
 # TODO: these should probably come from a "eqthy.hints" module
 from eqthy.parser import Reflexivity, Substitution, Congruence, Reference
-from eqthy.terms import Eqn, all_matches, expand, subterm_at_index, update_at_index, render, RewriteRule, replace
+from eqthy.terms import Eqn, all_rewrites, expand, subterm_at_index, update_at_index, render, RewriteRule, replace
 
 
 class DerivationError(Exception):
@@ -75,7 +75,7 @@ class Verifier:
 
         for (name, rule) in rules_to_try.items():
             self.log("  Trying to rewrite lhs {} with {}", render(prev.eqn.lhs), render(rule))
-            for rewritten_lhs in self.all_rewrites(rule, prev.eqn.lhs):
+            for rewritten_lhs in all_rewrites(rule.pattern, rule.substitution, prev.eqn.lhs):
                 self.log("    Using {}, rewrote {} to {}", render(rule), render(prev.eqn.lhs), render(rewritten_lhs))
                 rewritten_eqn = Eqn(rewritten_lhs, prev.eqn.rhs)
                 if step.eqn == rewritten_eqn:
@@ -83,7 +83,7 @@ class Verifier:
                     return rewritten_eqn
 
             self.log("  Trying to rewrite rhs {} with {}", render(prev.eqn.rhs), render(rule))
-            for rewritten_rhs in self.all_rewrites(rule, prev.eqn.rhs):
+            for rewritten_rhs in all_rewrites(rule.pattern, rule.substitution, prev.eqn.rhs):
                 self.log("    Using {}, rewrote {} to {}", render(rule), render(prev.eqn.rhs), render(rewritten_rhs))
                 rewritten_eqn = Eqn(prev.eqn.lhs, rewritten_rhs)
                 if step.eqn == rewritten_eqn:
@@ -125,19 +125,3 @@ class Verifier:
             rules[step.hint.name + '_1'] = self.rules[step.hint.name + '_1']
             rules[step.hint.name + '_2'] = self.rules[step.hint.name + '_2']
             return rules
-
-    def all_rewrites(self, rule, term):
-        """Given a term, and a rule, return a list of the terms that would result
-        from rewriting the term in all the possible ways by the rule."""
-
-        # First, obtain all the unifiers where the pattern of the rule matches any subterm of the term
-        matches = all_matches(rule.pattern, term)
-
-        # Now, collect all the rewritten terms -- a subterm replaced by the expanded rhs of the rule
-        rewrites = []
-        for (index, unifier) in matches:
-            rewritten_subterm = expand(rule.substitution, unifier)
-            result = update_at_index(term, rewritten_subterm, index)
-            rewrites.append(result)
-
-        return rewrites
