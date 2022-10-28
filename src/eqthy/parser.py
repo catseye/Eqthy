@@ -4,20 +4,20 @@ from eqthy.scanner import Scanner
 from eqthy.terms import Term, Variable, Eqn
 
 
-# Development := {Axiom} {Theorem}.
-# Axiom   := "axiom" [Name] Eqn.
-# Theorem := "theorem" [Name] Eqn "proof" {Step} "qed".
-# Name    := "(" Ident ")".
-# Step    := Eqn ["[" "by" Hint "]"].
-# Hint    := "reflexivity"
-#          | "substitution" "of" Term "into" Var
-#          | "congruence" "of" Var "and" Term
-#          | Ident ["on" ("LHS" | "RHS")].
-# Eqn     := Term "=" Term.
-# Term    := Var | Ctor ["(" [Term {"," Term} ")"].
+# Document := {Axiom} {Theorem}.
+# Axiom    := "axiom" [Name] Eqn.
+# Theorem  := "theorem" [Name] Eqn "proof" {Step} "qed".
+# Name     := "(" Ident ")".
+# Step     := Eqn ["[" "by" Hint "]"].
+# Hint     := "reflexivity"
+#           | "substitution" "of" Term "into" Var
+#           | "congruence" "of" Var "and" Term
+#           | Ident ["on" ("LHS" | "RHS")].
+# Eqn      := Term "=" Term.
+# Term     := Var | Ctor ["(" [Term {"," Term} ")"].
 
 
-Development = namedtuple('Development', ['axioms', 'theorems'])
+Document = namedtuple('Document', ['axioms', 'theorems'])
 Axiom = namedtuple('Axiom', ['name', 'eqn'])
 Theorem = namedtuple('Theorem', ['name', 'eqn', 'steps'])
 Step = namedtuple('Step', ['eqn', 'hint'])
@@ -33,14 +33,14 @@ class Parser(object):
         self.axiom_count = 0
         self.theorem_count = 0
 
-    def development(self):
+    def document(self):
         axioms = []
         theorems = []
         while self.scanner.on('axiom'):
             axioms.append(self.axiom())
         while self.scanner.on('theorem'):
             theorems.append(self.theorem())
-        return Development(axioms=axioms, theorems=theorems)
+        return Document(axioms=axioms, theorems=theorems)
 
     def axiom(self):
         self.scanner.expect('axiom')

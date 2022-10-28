@@ -38,7 +38,7 @@ def main(args):
             text += f.read()
 
     p = Parser(text, filename)
-    ast = p.development()
+    ast = p.document()
     if options.dump_ast:
         print(ast)
         sys.exit(0)

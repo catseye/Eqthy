@@ -1,6 +1,6 @@
 # TODO: these should probably come from a "eqthy.hints" module
 from eqthy.parser import Reflexivity, Substitution, Congruence, Reference
-from eqthy.terms import Eqn, all_rewrites, expand, subterm_at_index, update_at_index, render, RewriteRule, replace
+from eqthy.terms import Eqn, all_rewrites, render, RewriteRule, replace
 
 
 class DerivationError(Exception):
@@ -8,9 +8,9 @@ class DerivationError(Exception):
 
 
 class Verifier:
-    def __init__(self, development, verbose=True):
-        self.axioms = development.axioms
-        self.theorems = development.theorems
+    def __init__(self, document, verbose=True):
+        self.axioms = document.axioms
+        self.theorems = document.theorems
         self.verbose = verbose
         self.rules = {}
 
