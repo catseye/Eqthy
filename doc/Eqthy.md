@@ -139,6 +139,27 @@ This document consists of some axioms and a theorem.
     qed
     ===> ok
 
+A document may contain more than one theorem.
+
+    axiom mul(A, e) = A
+    axiom mul(e, A) = A
+    axiom mul(A, mul(B, C)) = mul(mul(A, B), C)
+    theorem
+        mul(A, e) = mul(e, A)
+    proof
+        A = A
+        mul(A, e) = A
+        mul(A, e) = mul(e, A)
+    qed
+    theorem
+        mul(e, A) = mul(A, e)
+    proof
+        A = A
+        A = mul(A, e)
+        mul(e, A) = mul(A, e)
+    qed
+    ===> ok
+
 Any variable name you like can be used in a theorem.
 
     axiom mul(A, e) = A
@@ -178,6 +199,35 @@ This theorem does not prove what it says it proves.
         mul(A, e) = A
     qed
     ???> DerivationError: No step in proof showed mul(A, e) = mul(A, A)
+
+Typically, all theorems that are given in the document are checked,
+and are checked in sequence, and checking stops at the first failure.
+
+    axiom mul(A, e) = A
+    axiom mul(e, A) = A
+    axiom mul(A, mul(B, C)) = mul(mul(A, B), C)
+    theorem
+        mul(A, e) = mul(e, A)
+    proof
+        A = A
+        mul(A, e) = A
+        mul(A, e) = mul(e, A)
+    qed
+    theorem
+        mul(e, A) = mul(A, e)
+    proof
+        A = A
+        A = mul(A, e)
+        mul(e, A) = mul(A, A)
+    qed
+    theorem
+        mul(e, A) = mul(A, e)
+    proof
+        A = A
+        A = mul(A, e)
+        mul(e, A) = mul(e, A)
+    qed
+    ???> DerivationError: Could not derive mul(e, A) = mul(A, A) from A = mul(A, e)
 
 This proof requires rewrites on the right-hand side of the equation.
 

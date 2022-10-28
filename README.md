@@ -47,9 +47,13 @@ TODO
 ----
 
 *   Handle "on LHS", "on RHS" in hints.
-*   Demonstrate multiple theorems, and that previous theorems can be used
-    as justifications in proof steps.
+*   Demonstrate that previous theorems can be used as justifications in
+    proof steps.
 *   Show the step number or line number in the error message when
     there is a derivation error.
 *   Allow rules to be instantiated with variable names other than the
     ones that are specified in the rule.
+*   Decide what happens when multiple files are given on the command line.
+    Simply concatenating them does not play well with a grammar where
+    axioms cannot follow theorems.  Ideally we would want to trace the
+    source file name for error reporting too.

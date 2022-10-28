@@ -35,7 +35,7 @@ def main(args):
     text = ''
     for filename in options.input_files:
         with codecs.open(filename, 'r', encoding='UTF-8') as f:
-            text += f.read()
+            text += f.read() + '\n'
 
     p = Parser(text, filename)
     ast = p.document()
