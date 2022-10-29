@@ -12,22 +12,24 @@ style sometimes used in introductory textbooks, where each line follows
 from the previous line, and may optionally give a justification for the
 proof step.  Here is an example:
 
-    axiom (id-right) mul(A, e) = A
-    axiom (id-left)  mul(e, A) = A
+    axiom (idright) mul(A, e) = A
+    axiom (idleft)  mul(e, A) = A
     axiom (assoc)    mul(A, mul(B, C)) = mul(mul(A, B), C)
-    theorem (id-comm)
+    theorem (idcomm)
         mul(A, e) = mul(e, A)
     proof
         A = A
-        mul(A, e) = A           [by id-right]
-        mul(A, e) = mul(e, A)   [by id-left]
+        mul(A, e) = A           [by idright]
+        mul(A, e) = mul(e, A)   [by idleft]
     qed
 
 For a fuller description of the language, including a set of Falderal
 tests, see **[doc/Eqthy.md](doc/Eqthy.md)**.
 
 A number of proofs have been written in Eqthy.  These can be found in
-the **[eg/](eg/)** directory.
+the **[eg/](eg/)** directory.  In particular, there is a worked-out
+proofs of [Socks and Shoes](eg/socks-and-shoes.eqthy) in group theory,
+with hopefully more coming soon.
 
 ### Implementations
 
