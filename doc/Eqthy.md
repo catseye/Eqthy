@@ -160,6 +160,30 @@ A document may contain more than one theorem.
     qed
     ===> ok
 
+Subsequent theorems can build on the results of previously-proved
+theorems.
+
+(TODO: this is definitely not the best example; give a better one.)
+
+    axiom mul(A, e) = A
+    axiom mul(e, A) = A
+    axiom mul(A, mul(B, C)) = mul(mul(A, B), C)
+    theorem
+        mul(e, A) = mul(A, e)
+    proof
+        A = A
+        A = mul(A, e)
+        mul(e, A) = mul(A, e)
+    qed
+    theorem
+        A = mul(A, e)
+    proof
+        A = A
+        A = mul(e, A)
+        A = mul(A, e)
+    qed
+    ===> ok
+
 Any variable name you like can be used in a theorem.
 
     axiom mul(A, e) = A
@@ -302,6 +326,49 @@ is incorrect.  It is reasonable to (at least) warn the user of this mistake.
         A = mul(A, e)  [by idleft]
     qed
     ???> Could not derive A = mul(A, e) from A = A
+
+Proof steps can also name a previously-proved theorem in a hint.
+
+    axiom (idright) mul(A, e) = A
+    axiom (idleft)  mul(e, A) = A
+    axiom (assoc)   mul(A, mul(B, C)) = mul(mul(A, B), C)
+    theorem (idcomm)
+        mul(e, A) = mul(A, e)
+    proof
+        A = A
+        A = mul(A, e)
+        mul(e, A) = mul(A, e)
+    qed
+    theorem (something)
+        A = mul(A, e)
+    proof
+        A = A
+        A = mul(e, A)
+        A = mul(A, e)   [by idcomm]
+    qed
+    ===> ok
+
+Naming a theorem in a hint when the theorem used was not actually used there
+is incorrect.  It is reasonable to (at least) warn the user of this mistake.
+
+    axiom (idright) mul(A, e) = A
+    axiom (idleft)  mul(e, A) = A
+    axiom (assoc)   mul(A, mul(B, C)) = mul(mul(A, B), C)
+    theorem (idcomm)
+        mul(e, A) = mul(A, e)
+    proof
+        A = A
+        A = mul(A, e)
+        mul(e, A) = mul(A, e)
+    qed
+    theorem (something)
+        A = mul(A, e)
+    proof
+        A = A
+        A = mul(e, A)
+        A = mul(A, A)   [by idcomm]
+    qed
+    ???> Could not derive A = mul(A, A) from A = mul(e, A)
 
 Using the reflexivity hint when the rule used was not actually reflexivity
 is incorrect.  It is reasonable to (at least) warn the user of this mistake.
