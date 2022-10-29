@@ -1,3 +1,5 @@
+// https://proofwiki.org/wiki/Group_Element_Commutes_with_Inverse
+
 axiom mul(A, e) = A
 axiom mul(e, A) = A
 axiom mul(A, mul(B, C)) = mul(mul(A, B), C)

@@ -57,3 +57,4 @@ TODO
     Simply concatenating them does not play well with a grammar where
     axioms cannot follow theorems.  Ideally we would want to trace the
     source file name for error reporting too.
+*   Terminology: hint => justification

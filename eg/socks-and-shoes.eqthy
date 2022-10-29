@@ -1,9 +1,12 @@
+// https://en.wikiversity.org/wiki/Introduction_to_group_theory/Socks_and_shoes_proof
+// (Also: https://proofwiki.org/wiki/Inverse_of_Product)
+
 axiom (#id-right) mul(A, e) = A
 axiom (#id-left)  mul(e, A) = A
 axiom (#assoc)    mul(A, mul(B, C)) = mul(mul(A, B), C)
 axiom (#invA1)    mul(A, inv(A)) = e
-axiom (#invA2)    mul(inv(A), A) = e  // fixme: should be shown as a theorem
-axiom (#invB1)    mul(B, inv(B)) = e  // fixme: should be possible to rename variables by choice when applying an axiom
+axiom (#invA2)    mul(inv(A), A) = e  // FIXME: should be shown as a theorem
+axiom (#invB1)    mul(B, inv(B)) = e  // FIXME: should be possible to rename variables by choice when applying an axiom
 axiom (#invB2)    mul(inv(B), B) = e
 
 theorem (#socks-and-shoes)
