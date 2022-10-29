@@ -257,8 +257,9 @@ Axioms and theorems can be named.
     qed
     ===> ok
 
-Names of axioms and theorems can begin with a `#` symbol
-and contain `-` symbols.
+The name of an axiom or a theorem can either begin with an alphabetic
+character, or it can begin with a `#` symbol.  If it begins with a `#`
+symbol, it may contain `-` symbols.
 
     axiom (#id-right) mul(A, e) = A
     axiom (#id-left)  mul(e, A) = A
