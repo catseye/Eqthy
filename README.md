@@ -6,11 +6,11 @@ _Version 0.0_ | _See also:_ [Philomath](https://github.com/catseye/Philomath#rea
 
 - - - -
 
-**Eqthy** is a language for equational proofs.  It is designed to be both
-machine-readable and human-usable.  It strongly resembles the equational
-style sometimes used in introductory textbooks, where each line follows
-from the previous line, and may optionally give a justification for the
-proof step.  Here is an example:
+**Eqthy** is a simple formal language for equational proofs.  It is designed to be both
+machine-readable and (just barely) human-usable.  It strongly resembles the equational
+style sometimes used in textbooks, where each line is derived from the previous line,
+and may optionally state the justification for the derivation in that step.
+Here is an example:
 
     axiom (idright) mul(A, e) = A
     axiom (idleft)  mul(e, A) = A
@@ -28,21 +28,21 @@ tests, see **[doc/Eqthy.md](doc/Eqthy.md)**.
 
 A number of proofs have been written in Eqthy.  These can be found in
 the **[eg/](eg/)** directory.  In particular, there is a worked-out
-proofs of [Socks and Shoes](eg/socks-and-shoes.eqthy) in group theory,
-with hopefully more coming soon.
+proof of the [Socks and Shoes](eg/socks-and-shoes.eqthy) theorem in
+group theory, with hopefully more coming soon.
 
 ### Implementations
 
-The language does not prescribe any specific usage but it is expected
-that one of the main reasons for a computer to read a proof written
-in Eqthy would be to check it for validity.
+While the language does not prescribe any specific usage for proofs
+written in Eqthy, it is reasonable to expect that one of the main reasons
+for a computer to read one would be to check it for validity.
 
 This distribution contains such a proof checker, written in Python 3.
 The source code for it can be found in the **[src/](src/)** directory.
 
 The core module that does proof checking,
 **[eqthy.verifier](src/eqthy/verifier.py)**, is less than 200 lines in length,
-despite having many logging statements.  The hope is to make investigating
+despite having many logging statements.  The desire is to make reading it
 and understanding its behaviour as un-intimidating as possible.
 
 TODO
