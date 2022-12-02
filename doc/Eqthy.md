@@ -24,11 +24,7 @@ means are:
 
 *   the axioms that have been previously defined
 *   the theorems that have been previously proved
-*   the rules of inference of equational logic, which are
-    *    Reflexivity (A=A)
-    *    Transitivity (if A=B and B=C then A=C)
-    *    Substitution (if x(A)=y(A) then x(B)=y(B))
-    *    Congruence (if A=B then x(A)=x(B))
+*   the rules of inference of [equational logic](Equational-Logic.md)
 
 The sequence of equations following a theorem is a proof.  Each equation in
 the proof is optionally annotated with a hint that follows it, indicating what
