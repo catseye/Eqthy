@@ -1,7 +1,7 @@
 Eqthy
 =====
 
-_Version 0.0_ | _See also:_ [Philomath](https://github.com/catseye/Philomath#readme)
+_Version 0.1_ | _See also:_ [Philomath](https://github.com/catseye/Philomath#readme)
 ∘ [LCF-style-ND](https://github.com/cpressey/LCF-style-ND#readme)
 
 - - - -
@@ -63,9 +63,9 @@ Metamath language is not widely regarded as being easy to write or read.)
 
 ### Implementations
 
-While the language does not prescribe any specific usage for proofs
+While the language does not prescribe any specific application for proofs
 written in Eqthy, it is reasonable to expect that one of the main reasons
-for a computer to read one would be to check it for validity.
+one would want a computer to read one would be for it to check it for validity.
 
 This distribution contains such a proof checker, written in Python 3.
 The source code for it can be found in the **[src/](src/)** directory.
