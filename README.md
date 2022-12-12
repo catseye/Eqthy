@@ -7,7 +7,7 @@ _Version 0.0_ | _See also:_ [Philomath](https://github.com/catseye/Philomath#rea
 - - - -
 
 **Eqthy** is a formalized language for equational proofs.  Its design attempts to
-balance _simplicity of implementation on a machine_ with _human usability_
+reconcile _simplicity of implementation on a machine_ with _human usability_
 ([more on this below](#design-principles)).  It supports an elementary linear
 style, where each line gives a step which is derived from the step on the previous
 line, and may optionally state the justification for the derivation in that step.
@@ -40,12 +40,12 @@ unlikely that the format of the language will change radically.
 
 Probably the language that Eqthy most resembles, in spirit, is
 [Metamath][]; but its underlying mechanics are rather different.
-Eqthy is based on equational logic, so each step is an equation.
+Eqthy is based on [equational logic][], so each step is an equation.
 
-Eqthy's design attempts to balance simplicity of implementation on a machine
-with human usability.  It should be understood that adding features to the
-language which improve usability will be detrimental to simplicity, and
-vice versa.
+Eqthy's design attempts to reconcile simplicity of implementation on a machine
+with human usability.  It should be understood that this is a balancing act;
+adding features to the language which improve usability will generally be
+detrimental to simplicity, and vice versa.
 
 It has been implemented in Python in about 550 lines of code; the core
 verifier module is less than 200 lines of code.  For more details, see
@@ -53,7 +53,7 @@ the [Implementations](#implementations) section below.
 
 It is also possible for a human to write Eqthy documents by hand, and
 to read them, without much specialized knowledge.  The base logic
-is equational logic, which has only 5 rules of inference, and these
+is [equational logic][], which has only 5 rules of inference, and these
 rules are particularly widely understood; "replace equals with equals" is
 a standard part of the high-school algebra cirriculum.
 
@@ -92,4 +92,5 @@ TODO
     axioms cannot follow theorems.  Ideally we would want to trace the
     source file name for error reporting too.
 
-[Metamath][]: https://us.metamath.org/
+[Metamath]: https://us.metamath.org/
+[equational logic]: doc/Equational-Logic.md
