@@ -1,3 +1,6 @@
+Rule: Congruence
+================
+
 Demonstration of the use of Congruence in a proof.
 (This is not something the `eqthy` checker searches for,
 so it does have to be given explicitly in the justification.)
