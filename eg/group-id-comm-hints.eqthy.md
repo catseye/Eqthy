@@ -1,0 +1,13 @@
+Like group-id-comm.eqthy, but with justifications supplied on each step.
+
+    axiom (#id-right) mul(A, e) = A
+    axiom (#id-left)  mul(e, A) = A
+    axiom (#assoc)    mul(A, mul(B, C)) = mul(mul(A, B), C)
+
+    theorem (#id-comm)
+        mul(A, e) = mul(e, A)
+    proof
+        A = A                   [by reflexivity]
+        mul(A, e) = A           [by #id-right on LHS]
+        mul(A, e) = mul(e, A)   [by #id-left on RHS]
+    qed

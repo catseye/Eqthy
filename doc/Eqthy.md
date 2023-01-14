@@ -92,7 +92,7 @@ Falderal format, in the hopes that they will help clarify
 the semantics of the language.
 
     -> Functionality "Parse Eqthy Document" is implemented by shell command
-    -> "python3 bin/eqthy --dump-ast %(test-body-file) 2>&1 > /dev/null && echo 'ok'"
+    -> "python3 bin/eqthy --bare --dump-ast %(test-body-file) 2>&1 > /dev/null && echo 'ok'"
 
 ### Parse Eqthy Document
 
@@ -118,7 +118,7 @@ until the end of the line.
 ### Check Eqthy Document
 
     -> Functionality "Check Eqthy Document" is implemented by shell command
-    -> "python3 bin/eqthy %(test-body-file) && echo 'ok'"
+    -> "python3 bin/eqthy --bare %(test-body-file) && echo 'ok'"
 
     -> Tests for functionality "Check Eqthy Document"
 
