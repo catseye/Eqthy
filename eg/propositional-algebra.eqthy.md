@@ -1,8 +1,10 @@
 Propositional Algebra
 =====================
 
-Possible formulation of propositional algebra.  NOTE: still under development.
-See Section II of "An Algebraic Introduction to Mathematical Logic" (Barnes, 1975)
+_NOTE: still under development_
+
+This is a possible formulation of propositional algebra in Eqthy.  For some background,
+see Section II of [An Algebraic Introduction to Mathematical Logic][] (Barnes and Mack, 1975)
 but note that, while this follows the general ideas there, it might not follow them closely.
 
 `th(X, ...)` indicates that X is in the list of theorems.  There may be more theorems
@@ -24,5 +26,29 @@ In addition, we have modus ponens.
 
     axiom th(P, th(impl(P, Q), e)) = th(Q, th(P, th(impl(P, Q), e)))
 
-I believe this should work, but obviously this needs a worked-out proof or two
-to vet it.  TODO
+I believe this should work.  So, let's pick a simple proof and write it up and see if
+the `eqthy` checker can confirm it.  Example 4.5 on page 16 of Barnes and Mack:
+
+>   |- p => p
+
+We write this in equational logic by saying that any set of theorems is equal to a
+set of theorems which contains this theorem.
+
+    // theorem
+    //    th(X, e) = th(X, th(impl(P, P), e))
+
+The proof given in the book is
+
+> p1 = p => ((p => p) => p)  
+> p2 = (p => ((p => p) => p)) => ((p => (p => p)) => (p=>p))  
+> p3 = (p => (p => p)) => (p => p)  
+> p4 = p => (p => p)  
+> p5 = p => p  
+
+And now we... mechanically translate that...
+
+    // proof
+    //     TODO = TODO
+    // qed
+
+[An Algebraic Introduction to Mathematical Logic]: https://archive.org/details/algebraicintrodu00barn_0
