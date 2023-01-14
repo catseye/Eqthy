@@ -93,6 +93,7 @@ TODO
     ones that are specified in the rule.
 *   Allow context accumulated when verifying one document to be
     carried over and used when verifying the next documnet.
+*   Allow the first line of a proof to be an axiom.
 
 [Metamath]: https://us.metamath.org/
 [equational logic]: doc/Equational-Logic.md

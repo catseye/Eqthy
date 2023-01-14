@@ -18,6 +18,7 @@ class Verifier:
         for axiom in self.axioms:
             lhs = axiom.eqn.lhs
             rhs = axiom.eqn.rhs
+            self.log("Registering axiom [{}]: {} = {}", render(axiom.name), render(lhs), render(rhs))
             self.rules[axiom.name + '_1'] = RewriteRule(pattern=lhs, substitution=rhs)
             self.rules[axiom.name + '_2'] = RewriteRule(pattern=rhs, substitution=lhs)
 
@@ -27,7 +28,7 @@ class Verifier:
 
     def verify(self):
         for theorem in self.theorems:
-            self.log("Verifying theorem named {}", render(theorem.name))
+            self.log("Verifying theorem [{}]", render(theorem.name))
             self.verify_theorem(theorem)
             lhs = theorem.eqn.lhs
             rhs = theorem.eqn.rhs
