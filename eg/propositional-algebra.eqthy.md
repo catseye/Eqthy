@@ -39,11 +39,11 @@ set of theorems which contains this theorem.
 
 The proof given in the book is
 
-> p1 = p => ((p => p) => p)  
-> p2 = (p => ((p => p) => p)) => ((p => (p => p)) => (p=>p))  
-> p3 = (p => (p => p)) => (p => p)  
-> p4 = p => (p => p)  
-> p5 = p => p  
+> p1 = p => ((p => p) => p)  [by #axiom-1]  
+> p2 = (p => ((p => p) => p)) => ((p => (p => p)) => (p=>p))  [by #axiom-2]  
+> p3 = (p => (p => p)) => (p => p)  [p2 = p1 => p3]  
+> p4 = p => (p => p)  [by #axiom-1]  
+> p5 = p => p  [p3 = p4 => p5]  
 
 And now we... mechanically translate that...
 
