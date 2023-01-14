@@ -35,20 +35,21 @@ def main(args):
 
     options = argparser.parse_args(args)
 
-    text = ''
-    for filename in options.input_files:
-        with codecs.open(filename, 'r', encoding='UTF-8') as f:
-            text += f.read() + '\n'
-
-    p = Parser(text, filename)
-    ast = p.document()
-    if options.dump_ast:
-        print(ast)
-        sys.exit(0)
-
-    verifier = Verifier(ast, verbose=options.verbose)
     try:
-        verifier.verify()
+        context = {}
+        for filename in options.input_files:
+            with codecs.open(filename, 'r', encoding='UTF-8') as f:
+                text = f.read()
+
+            p = Parser(text, filename)
+            ast = p.document()
+            if options.dump_ast:
+                print(ast)
+                sys.exit(0)
+
+            verifier = Verifier(ast, verbose=options.verbose, context=context)
+            new_context = verifier.verify()
+            context.update(new_context)
     except Exception as e:
         print('*** {}: {}'.format(e.__class__.__name__, e))
         if options.traceback:

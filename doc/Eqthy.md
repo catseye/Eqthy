@@ -106,7 +106,7 @@ This document is well-formed.  It will parse.
 This document is not well-formed.  It will not parse.
 
     axiom inv(A) .
-    ???> Expected '=', but found '.'
+    ???> 
 
 Comments are introduced with the symbol sequence `//`.  They extend
 until the end of the line.
