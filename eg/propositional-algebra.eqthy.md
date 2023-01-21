@@ -25,7 +25,7 @@ We model this by saying that any set of theorems T is equal to T with any of the
 extra axiomatic statements added to it.
 
     axiom (#A1) th(X, e) = th(X, th(impl(P, impl(Q, P)), e))
-    axiom (#A2) th(X, e) = th(X, th(impl(impl(P, impl(Q, R)), impl(impl(P, Q), impl(P, R)), e)))
+    axiom (#A2) th(X, e) = th(X, th(impl(impl(P, impl(Q, R)), impl(impl(P, Q), impl(P, R))), e))
     axiom (#A3) th(X, e) = th(X, th(impl(not(not(P)), P), e))
 
 In addition, we have modus ponens ("from p and p => q, deduce q"):
@@ -60,19 +60,23 @@ And now we... mechanically translate that...
         th(X, e) = th(X, th(impl(P, impl(impl(P, P), P)), e))       [by substitution of impl(P, P) into Q]
 
         th(X, e) = th(X, th(impl(P, impl(impl(P, P), P)),
-                         th(impl(impl(P, impl(Q, R)), impl(impl(P, Q), impl(P, R)), e))))
+                         th(impl(impl(P, impl(Q, R)), impl(impl(P, Q), impl(P, R))), e)))
                                                                     [by #A2]
 
         th(X, e) = th(X, th(impl(P, impl(impl(P, P), P)),
-                         th(impl(impl(P, impl(impl(P, P), R)), impl(impl(P, impl(P, P)), impl(P, R)), e))))
+                         th(impl(impl(P, impl(impl(P, P), R)), impl(impl(P, impl(P, P)), impl(P, R))), e)))
                                                                     [by substitution of impl(P, P) into Q]
 
         th(X, e) = th(X, th(impl(P, impl(impl(P, P), P)),
-                         th(impl(impl(P, impl(impl(P, P), P)), impl(impl(P, impl(P, P)), impl(P, P)), e))))
+                         th(impl(impl(P, impl(impl(P, P), P)), impl(impl(P, impl(P, P)), impl(P, P))), e)))
                                                                     [by substitution of P into R]
 
-        // th(X, e) = th(X, th(impl(impl(P, impl(P, P)), impl(P, P)), e))
-        //                                                             [by #MP]
+        th(X, e) = th(X, th(impl(P, impl(impl(P, P), P)),
+                         th(impl(impl(P, impl(impl(P, P), P)), impl(impl(P, impl(P, P)), impl(P, P))), e)))
+                                                                    [by substitution of P into R]
+
+        th(X, e) = th(X, th(impl(impl(P, impl(P, P)), impl(P, P)), e))
+                                                                    [by #MP]
         // FIXME TODO
     qed
 

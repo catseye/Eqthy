@@ -94,6 +94,7 @@ TODO
 *   Allow context accumulated when verifying one document to be
     carried over and used when verifying the next documnet.
 *   Allow the first line of a proof to be an axiom.
+*   Arity checking?  Would prevent some silly errors in axioms.
 
 [Metamath]: https://us.metamath.org/
 [equational logic]: doc/Equational-Logic.md
