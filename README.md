@@ -32,9 +32,12 @@ For a fuller description of the language, including a set of Falderal
 tests, see **[doc/Eqthy.md](doc/Eqthy.md)**.
 
 A number of proofs have been written in Eqthy to date.  These can be found in
-the **[eg/](eg/)** directory.  In particular, there is a worked-out
-proof of the [Socks and Shoes](eg/socks-and-shoes.eqthy.md) theorem in
-group theory, with hopefully more coming soon.
+the **[eg/](eg/)** directory.  In particular, there are worked-out proofs:
+
+*   of the [Socks and Shoes](eg/socks-and-shoes.eqthy.md) theorem in group theory
+*   in [Propositional Algebra](eg/propositional-algebra.md)
+
+with hopefully more to come in the future.
 
 The Eqthy language is still at an early stage and is subject to change.  However,
 since the idea is to accumulate a database of proofs which can be built upon,

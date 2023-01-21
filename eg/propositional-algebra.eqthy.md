@@ -1,8 +1,6 @@
 Propositional Algebra
 =====================
 
-_NOTE: still under development_
-
 This is a possible formulation of propositional algebra in Eqthy.  For some background,
 see Section II of [An Algebraic Introduction to Mathematical Logic][] (Barnes and Mack, 1975)
 but note that, while this follows the general ideas there, it might not follow them closely.
@@ -32,6 +30,10 @@ In addition, we have modus ponens ("from p and p => q, deduce q"):
 
     axiom (#MP) th(P, th(impl(P, Q), e)) = th(Q, e)
 
+(And, for convenience, a reversed version of it.  FIXME make this work with #th-comm)
+
+    axiom (#MP-rev) th(impl(P, Q), th(P, e)) = th(Q, e)
+
 I believe this should work.  So, let's pick a simple proof and write it up and see if
 the `eqthy` checker can confirm it.  Example 4.5 on page 16 of Barnes and Mack:
 
@@ -41,8 +43,7 @@ We write this in equational logic by saying that any set of theorems is equal to
 set of theorems which contains this theorem.
 
     theorem
-        // th(X, e) = th(X, th(impl(P, P), e))
-        th(X, e) = th(X, th(impl(P, impl(impl(P, P), P)), e))
+        th(X, e) = th(X, th(impl(P, P), e))
 
 The proof given in the book is
 
@@ -60,8 +61,7 @@ And now we... mechanically translate that...
         th(X, e) = th(X, th(impl(P, impl(impl(P, P), P)), e))       [by substitution of impl(P, P) into Q]
 
         th(X, e) = th(X, th(impl(P, impl(impl(P, P), P)),
-                         th(impl(impl(P, impl(Q, R)), impl(impl(P, Q), impl(P, R))), e)))
-                                                                    [by #A2]
+                         th(impl(impl(P, impl(Q, R)), impl(impl(P, Q), impl(P, R))), e)))       [by #A2]
 
         th(X, e) = th(X, th(impl(P, impl(impl(P, P), P)),
                          th(impl(impl(P, impl(impl(P, P), R)), impl(impl(P, impl(P, P)), impl(P, R))), e)))
@@ -75,9 +75,12 @@ And now we... mechanically translate that...
                          th(impl(impl(P, impl(impl(P, P), P)), impl(impl(P, impl(P, P)), impl(P, P))), e)))
                                                                     [by substitution of P into R]
 
-        th(X, e) = th(X, th(impl(impl(P, impl(P, P)), impl(P, P)), e))
-                                                                    [by #MP]
-        // FIXME TODO
+        th(X, e) = th(X, th(impl(impl(P, impl(P, P)), impl(P, P)), e))                           [by #MP]
+
+        th(X, e) = th(X, th(impl(impl(P, impl(P, P)), impl(P, P)), th(impl(P, impl(Q, P)), e)))  [by #A1]
+        th(X, e) = th(X, th(impl(impl(P, impl(P, P)), impl(P, P)), th(impl(P, impl(P, P)), e)))
+                                                                    [by substitution of P into Q]
+        th(X, e) = th(X, th(impl(P, P), e))                         [by #MP-rev]
     qed
 
 [An Algebraic Introduction to Mathematical Logic]: https://archive.org/details/algebraicintrodu00barn_0
