@@ -15,6 +15,12 @@ The order that the theorems appear in the list does not matter.
     axiom (#th-comm)  th(X, Y) = th(Y, X)
 
 The logic system is a Hilbert-style system.  There are three statements that are axioms.
+In the book, they are given "semantically", using set comprehensions.
+
+> A1 = {p => (q => p) | p, q elem P(X)}  
+> A2 = {(p => (q => r)) => ((p => q) => (p => r)) | p, q, r elem P(X)}  
+> A3 = {~~p => p | p elem P(X)}  
+
 We model this by saying that any set of theorems T is equal to T with any of these
 extra axiomatic statements added to it.
 
@@ -22,9 +28,9 @@ extra axiomatic statements added to it.
     axiom (#A2) th(X, e) = th(X, th(impl(impl(P, impl(Q, R)), impl(impl(P, Q), impl(P, R)), e)))
     axiom (#A3) th(X, e) = th(X, th(impl(not(not(P)), P), e))
 
-In addition, we have modus ponens.
+In addition, we have modus ponens ("from p and p => q, deduce q"):
 
-    axiom (#MP) th(P, th(impl(P, Q), e)) = th(Q, th(P, th(impl(P, Q), e)))
+    axiom (#MP) th(P, th(impl(P, Q), e)) = th(Q, e)
 
 I believe this should work.  So, let's pick a simple proof and write it up and see if
 the `eqthy` checker can confirm it.  Example 4.5 on page 16 of Barnes and Mack:
@@ -50,8 +56,23 @@ And now we... mechanically translate that...
 
     proof
         th(X, e) = th(X, e)
-        th(X, e) = th(X, th(impl(P, impl(Q, P)), e))              [by #A1]
-        th(X, e) = th(X, th(impl(P, impl(impl(P, P), P)), e))     [by substitution of impl(P, P) into Q]
+        th(X, e) = th(X, th(impl(P, impl(Q, P)), e))                [by #A1]
+        th(X, e) = th(X, th(impl(P, impl(impl(P, P), P)), e))       [by substitution of impl(P, P) into Q]
+
+        th(X, e) = th(X, th(impl(P, impl(impl(P, P), P)),
+                         th(impl(impl(P, impl(Q, R)), impl(impl(P, Q), impl(P, R)), e))))
+                                                                    [by #A2]
+
+        th(X, e) = th(X, th(impl(P, impl(impl(P, P), P)),
+                         th(impl(impl(P, impl(impl(P, P), R)), impl(impl(P, impl(P, P)), impl(P, R)), e))))
+                                                                    [by substitution of impl(P, P) into Q]
+
+        th(X, e) = th(X, th(impl(P, impl(impl(P, P), P)),
+                         th(impl(impl(P, impl(impl(P, P), P)), impl(impl(P, impl(P, P)), impl(P, P)), e))))
+                                                                    [by substitution of P into R]
+
+        // th(X, e) = th(X, th(impl(impl(P, impl(P, P)), impl(P, P)), e))
+        //                                                             [by #MP]
         // FIXME TODO
     qed
 
