@@ -1,6 +1,6 @@
 from collections import namedtuple
 
-from eqthy.scanner import Scanner
+from eqthy.scanner import Scanner, EqthySyntaxError
 from eqthy.terms import Term, Variable, Eqn
 
 
@@ -40,6 +40,8 @@ class Parser(object):
             axioms.append(self.axiom())
         while self.scanner.on('theorem'):
             theorems.append(self.theorem())
+        if not (axioms or theorems):
+            raise EqthySyntaxError(self.scanner.filename, self.scanner.line_number, "Eqthy document is empty")
         return Document(axioms=axioms, theorems=theorems)
 
     def axiom(self):

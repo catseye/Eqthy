@@ -8,15 +8,17 @@ class DerivationError(Exception):
 
 
 class Verifier:
-    def __init__(self, document, verbose=True):
+    def __init__(self, document, verbose=True, context=None):
         self.axioms = document.axioms
         self.theorems = document.theorems
         self.verbose = verbose
+        self.context = context or {}
         self.rules = {}
 
         for axiom in self.axioms:
             lhs = axiom.eqn.lhs
             rhs = axiom.eqn.rhs
+            self.log("Registering axiom [{}]: {} = {}", render(axiom.name), render(lhs), render(rhs))
             self.rules[axiom.name + '_1'] = RewriteRule(pattern=lhs, substitution=rhs)
             self.rules[axiom.name + '_2'] = RewriteRule(pattern=rhs, substitution=lhs)
 
@@ -26,12 +28,14 @@ class Verifier:
 
     def verify(self):
         for theorem in self.theorems:
-            self.log("Verifying theorem named {}", render(theorem.name))
+            self.log("Verifying theorem [{}]", render(theorem.name))
             self.verify_theorem(theorem)
             lhs = theorem.eqn.lhs
             rhs = theorem.eqn.rhs
             self.rules[theorem.name + '_1'] = RewriteRule(pattern=lhs, substitution=rhs)
             self.rules[theorem.name + '_2'] = RewriteRule(pattern=rhs, substitution=lhs)
+        # TODO update context with axioms and proved theorems
+        return self.context
 
     def verify_theorem(self, theorem):
         self.log("Verifying theorem {}", render(theorem.eqn))

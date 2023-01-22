@@ -1,7 +1,7 @@
 Eqthy
 =====
 
-_Version 0.0_ | _See also:_ [Philomath](https://github.com/catseye/Philomath#readme)
+_Version 0.1_ | _See also:_ [Philomath](https://github.com/catseye/Philomath#readme)
 ∘ [LCF-style-ND](https://github.com/cpressey/LCF-style-ND#readme)
 
 - - - -
@@ -24,17 +24,24 @@ Here is an example:
         mul(A, e) = mul(e, A)   [by idleft]
     qed
 
+For improved human usability, Eqthy is usually embedded within Markdown documents.
+This allows proofs to be written in a more "literate" style, with interspersed
+explanatory prose and references in the form of hyperlinks.
+
 For a fuller description of the language, including a set of Falderal
 tests, see **[doc/Eqthy.md](doc/Eqthy.md)**.
 
 A number of proofs have been written in Eqthy to date.  These can be found in
-the **[eg/](eg/)** directory.  In particular, there is a worked-out
-proof of the [Socks and Shoes](eg/socks-and-shoes.eqthy) theorem in
-group theory, with hopefully more coming soon.
+the **[eg/](eg/)** directory.  In particular, there are worked-out proofs:
 
-The Eqthy language is still at an early stage and is subject to change.  Since
-the idea is to accumulate a database of proofs which can be built upon, it is
-unlikely that the format of the language will change radically.
+*   of the [Socks and Shoes](eg/socks-and-shoes.eqthy.md) theorem in group theory
+*   in [Propositional Algebra](eg/propositional-algebra.md)
+
+with hopefully more to come in the future.
+
+The Eqthy language is still at an early stage and is subject to change.  However,
+since the idea is to accumulate a database of proofs which can be built upon,
+it is unlikely that the format of the language will change radically.
 
 ### Design Principles
 
@@ -63,9 +70,9 @@ Metamath language is not widely regarded as being easy to write or read.)
 
 ### Implementations
 
-While the language does not prescribe any specific usage for proofs
+While the language does not prescribe any specific application for proofs
 written in Eqthy, it is reasonable to expect that one of the main reasons
-for a computer to read one would be to check it for validity.
+one would want a computer to read one would be for it to check it for validity.
 
 This distribution contains such a proof checker, written in Python 3.
 The source code for it can be found in the **[src/](src/)** directory.
@@ -87,10 +94,10 @@ TODO
     there is a derivation error.
 *   Allow rules to be instantiated with variable names other than the
     ones that are specified in the rule.
-*   Decide what happens when multiple files are given on the command line.
-    Simply concatenating them does not play well with a grammar where
-    axioms cannot follow theorems.  Ideally we would want to trace the
-    source file name for error reporting too.
+*   Allow context accumulated when verifying one document to be
+    carried over and used when verifying the next documnet.
+*   Allow the first line of a proof to be an axiom.
+*   Arity checking?  Would prevent some silly errors in axioms.
 
 [Metamath]: https://us.metamath.org/
 [equational logic]: doc/Equational-Logic.md
