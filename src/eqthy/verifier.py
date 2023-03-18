@@ -16,25 +16,22 @@ class Verifier:
         self.rules = {}
 
         for axiom in self.axioms:
-            lhs = axiom.eqn.lhs
-            rhs = axiom.eqn.rhs
-            self.log("Registering axiom [{}]: {} = {}", render(axiom.name), render(lhs), render(rhs))
-            self.rules[axiom.name + '_1'] = RewriteRule(pattern=lhs, substitution=rhs)
-            self.rules[axiom.name + '_2'] = RewriteRule(pattern=rhs, substitution=lhs)
+            self.register(axiom.name, axiom.eqn.lhs, axiom.eqn.rhs)
 
     def log(self, msg, *args):
         if self.verbose:
             print(msg.format(*args))
 
+    def register(self, name, lhs, rhs):
+        self.log("Registering rule [{}]: {} = {}", render(name), render(lhs), render(rhs))
+        self.rules[name + '_1'] = RewriteRule(pattern=lhs, substitution=rhs)
+        self.rules[name + '_2'] = RewriteRule(pattern=rhs, substitution=lhs)
+
     def verify(self):
         for theorem in self.theorems:
             self.log("Verifying theorem [{}]", render(theorem.name))
             self.verify_theorem(theorem)
-            lhs = theorem.eqn.lhs
-            rhs = theorem.eqn.rhs
-            self.rules[theorem.name + '_1'] = RewriteRule(pattern=lhs, substitution=rhs)
-            self.rules[theorem.name + '_2'] = RewriteRule(pattern=rhs, substitution=lhs)
-        # TODO update context with axioms and proved theorems
+            self.register(theorem.name, theorem.eqn.lhs, theorem.eqn.rhs)
         return self.context
 
     def verify_theorem(self, theorem):
