@@ -1,19 +1,19 @@
 Propositional Algebra
 =====================
 
-This is a possible formulation of propositional algebra in Eqthy.  For some background,
+This is one possible formulation of propositional algebra in Eqthy.  For some background,
 see Section II of [An Algebraic Introduction to Mathematical Logic][] (Barnes and Mack, 1975)
-but note that, while this follows the general ideas there, it might not follow them closely.
+but note that, while this follows the general ideas there, it might not follow them very closely.
 
 `th(X, ...)` indicates that X is in the list of theorems.  There may be more theorems
 in the ..., i.e. it is like a cons list.  `e` indicates the empty set of theorems. 
 The order that the theorems appear in the list does not matter.
 
     axiom (#th-assoc) th(X, th(Y, Z)) = th(th(X, Y), Z)
-    axiom (#th-comm)  th(X, Y) = th(Y, X)
+    axiom (#th-comm)  th(X, th(Y, Z)) = th(Y, th(X, Z))
 
-The logic system is a Hilbert-style system.  There are three statements that are axioms.
-In the book, they are given "semantically", using set comprehensions.
+The logic system is a Hilbert-style system, with three axioms.
+In Barnes and Mack, the axioms are given "semantically", using set comprehensions:
 
 > A1 = {p => (q => p) | p, q elem P(X)}  
 > A2 = {(p => (q => r)) => ((p => q) => (p => r)) | p, q, r elem P(X)}  
@@ -30,12 +30,8 @@ In addition, we have modus ponens ("from p and p => q, deduce q"):
 
     axiom (#MP) th(P, th(impl(P, Q), e)) = th(Q, e)
 
-(And, for convenience, a reversed version of it.  FIXME make this work with #th-comm)
-
-    axiom (#MP-rev) th(impl(P, Q), th(P, e)) = th(Q, e)
-
-I believe this should work.  So, let's pick a simple proof and write it up and see if
-the `eqthy` checker can confirm it.  Example 4.5 on page 16 of Barnes and Mack:
+I believe this is all we need to make this work.  So, let's pick a simple proof and write it up
+and see if the `eqthy` checker can confirm it.  Example 4.5 on page 16 of Barnes and Mack:
 
 >   |- p => p
 
@@ -80,7 +76,11 @@ And now we... mechanically translate that...
         th(X, e) = th(X, th(impl(impl(P, impl(P, P)), impl(P, P)), th(impl(P, impl(Q, P)), e)))  [by #A1]
         th(X, e) = th(X, th(impl(impl(P, impl(P, P)), impl(P, P)), th(impl(P, impl(P, P)), e)))
                                                                     [by substitution of P into Q]
-        th(X, e) = th(X, th(impl(P, P), e))                         [by #MP-rev]
+
+        th(X, e) = th(X, th(impl(P, impl(P, P)), th(impl(impl(P, impl(P, P)), impl(P, P)), e)))
+                                                                    [by #th-comm]
+
+        th(X, e) = th(X, th(impl(P, P), e))                         [by #MP]
     qed
 
 [An Algebraic Introduction to Mathematical Logic]: https://archive.org/details/algebraicintrodu00barn_0
