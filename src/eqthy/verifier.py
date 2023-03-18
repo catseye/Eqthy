@@ -29,13 +29,12 @@ class Verifier:
 
     def verify(self):
         for theorem in self.theorems:
-            self.log("Verifying theorem [{}]", render(theorem.name))
             self.verify_theorem(theorem)
             self.register(theorem.name, theorem.eqn.lhs, theorem.eqn.rhs)
         return self.context
 
     def verify_theorem(self, theorem):
-        self.log("Verifying theorem {}", render(theorem.eqn))
+        self.log("Verifying theorem [{}]: {}", render(theorem.name), render(theorem.eqn))
         prev = None
         rewritten_eqn = None
         eqn_shown = False
