@@ -1,5 +1,7 @@
-from collections import namedtuple
-
+from eqthy.objects import (
+    Document, Axiom, Theorem, Step,
+    Reflexivity, Substitution, Congruence, Reference
+)
 from eqthy.scanner import Scanner, EqthySyntaxError
 from eqthy.terms import Term, Variable, Eqn
 
@@ -17,16 +19,6 @@ from eqthy.terms import Term, Variable, Eqn
 # Term     := Var | Ctor ["(" [Term {"," Term} ")"].
 
 
-Document = namedtuple('Document', ['axioms', 'theorems'])
-Axiom = namedtuple('Axiom', ['name', 'eqn'])
-Theorem = namedtuple('Theorem', ['name', 'eqn', 'steps'])
-Step = namedtuple('Step', ['eqn', 'hint'])
-Reflexivity = namedtuple('Reflexivity', [])
-Substitution = namedtuple('Substitution', ['term', 'variable'])
-Congruence = namedtuple('Congruence', ['variable', 'term'])
-Reference = namedtuple('Reference', ['name', 'side'])
-
-
 class Parser(object):
     def __init__(self, text, filename):
         self.scanner = Scanner(text, filename)
@@ -41,7 +33,11 @@ class Parser(object):
         while self.scanner.on('theorem'):
             theorems.append(self.theorem())
         if not (axioms or theorems):
-            raise EqthySyntaxError(self.scanner.filename, self.scanner.line_number, "Eqthy document is empty")
+            raise EqthySyntaxError(
+                self.scanner.filename,
+                self.scanner.line_number,
+                "Eqthy document is empty"
+            )
         return Document(axioms=axioms, theorems=theorems)
 
     def axiom(self):

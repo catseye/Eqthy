@@ -13,6 +13,7 @@ def extract_from_markdown(text):
             new_lines.append(line[4:])
     return "\n".join(new_lines)
 
+
 def main(args):
     argparser = ArgumentParser()
 

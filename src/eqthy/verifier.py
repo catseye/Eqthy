@@ -1,5 +1,4 @@
-# TODO: these should probably come from a "eqthy.hints" module
-from eqthy.parser import Reflexivity, Substitution, Congruence, Reference
+from eqthy.objects import Reflexivity, Substitution, Congruence, Reference
 from eqthy.terms import Eqn, all_rewrites, render, RewriteRule, replace
 
 

@@ -125,7 +125,7 @@ def replace(term, target, replacement):
 
 
 def all_rewrites(pattern, substitution, term):
-    """Given a term, and a rule (a pattern and a substitution), return
+    """Given a rule (a pattern and a substitution) and a term, return
     a list of the terms that would result from rewriting the term
     in all the possible ways by the rule."""
 
