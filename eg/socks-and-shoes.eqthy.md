@@ -6,13 +6,11 @@ on Wikiversity.
 
 Also see [Inverse of Product](https://proofwiki.org/wiki/Inverse_of_Product) on ProofWiki.
 
-    axiom (#id-right) mul(A, e) = A
-    axiom (#id-left)  mul(e, A) = A
-    axiom (#assoc)    mul(A, mul(B, C)) = mul(mul(A, B), C)
-    axiom (#invA1)    mul(A, inv(A)) = e
-    axiom (#invA2)    mul(inv(A), A) = e  // FIXME: should be shown as a theorem
-    axiom (#invB1)    mul(B, inv(B)) = e  // FIXME: should be possible to rename variables by choice when applying an axiom
-    axiom (#invB2)    mul(inv(B), B) = e
+    axiom (#id-right)   mul(A, e) = A
+    axiom (#id-left)    mul(e, A) = A
+    axiom (#assoc)      mul(A, mul(B, C)) = mul(mul(A, B), C)
+    axiom (#inv-right)  mul(A, inv(A)) = e
+    axiom (#inv-left)   mul(inv(A), A) = e  // FIXME: should be shown as a theorem
 
     theorem (#socks-and-shoes)
         inv(mul(A, B)) = mul(inv(B), inv(A))
@@ -23,7 +21,7 @@ Also see [Inverse of Product](https://proofwiki.org/wiki/Inverse_of_Product) on 
         mul(mul(A, B), inv(mul(A, B))) = e                 [by substitution of mul(A, B) into A]
         mul(mul(A, B), inv(mul(A, B))) = mul(A, inv(A))
         mul(mul(A, B), inv(mul(A, B))) = mul(mul(A, e), inv(A))
-        mul(mul(A, B), inv(mul(A, B))) = mul(mul(A, mul(B, inv(B))), inv(A))
+        mul(mul(A, B), inv(mul(A, B))) = mul(mul(A, mul(B, inv(B))), inv(A))  [by #inv-right with A=B]
         mul(mul(A, B), inv(mul(A, B))) = mul(mul(mul(A, B), inv(B)), inv(A))
         mul(mul(A, B), inv(mul(A, B))) = mul(mul(A, B), mul(inv(B), inv(A)))
 
