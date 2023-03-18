@@ -1,5 +1,5 @@
 from eqthy.objects import Reflexivity, Substitution, Congruence, Reference
-from eqthy.terms import Eqn, all_rewrites, render, RewriteRule, replace
+from eqthy.terms import Eqn, all_rewrites, render, RewriteRule, replace, apply_substs_to_rule
 
 
 class DerivationError(Exception):
@@ -121,6 +121,6 @@ class Verifier:
             if step.hint.name + '_1' not in self.rules:
                 raise DerivationError("Rule named {} has not been established".format(step.hint.name))
             rules = {}
-            rules[step.hint.name + '_1'] = self.rules[step.hint.name + '_1']
-            rules[step.hint.name + '_2'] = self.rules[step.hint.name + '_2']
+            rules[step.hint.name + '_1'] = apply_substs_to_rule(self.rules[step.hint.name + '_1'], step.hint.substs)
+            rules[step.hint.name + '_2'] = apply_substs_to_rule(self.rules[step.hint.name + '_2'], step.hint.substs)
             return rules

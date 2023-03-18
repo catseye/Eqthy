@@ -14,7 +14,7 @@ from eqthy.terms import Term, Variable, Eqn
 # Hint     := "reflexivity"
 #           | "substitution" "of" Term "into" Var
 #           | "congruence" "of" Var "and" Term
-#           | Ident ["on" ("LHS" | "RHS")].
+#           | Ident ["on" ("LHS" | "RHS")] ["with" Subst {"," Subst}].
 # Eqn      := Term "=" Term.
 # Term     := Var | Ctor ["(" [Term {"," Term} ")"].
 
@@ -100,6 +100,7 @@ class Parser(object):
         else:
             name = self.scanner.token
             side = None
+            substs = []
             self.scanner.scan()
             if self.scanner.consume('on'):
                 if self.scanner.on('LHS') or self.scanner.on('RHS'):
@@ -107,7 +108,11 @@ class Parser(object):
                     self.scanner.scan()
                 else:
                     self.scanner.syntax_error("Expected 'LHS' or 'RHS'")
-            return Reference(name=name, side=side)
+            if self.scanner.consume('with'):
+                substs.append(self.eqn())
+                while self.scanner.consume(','):
+                    substs.append(self.eqn())
+            return Reference(name=name, side=side, substs=substs)
 
     def eqn(self):
         lhs = self.term()

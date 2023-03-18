@@ -90,8 +90,6 @@ TODO
 ----
 
 *   Handle "on LHS", "on RHS" in hints.
-*   Allow rules to be instantiated with variable names other than the
-    ones that are specified in the rule.
 *   Allow context accumulated when verifying one document to be
     carried over and used when verifying the next documnet.
 *   Allow the first line of a proof to be an axiom.

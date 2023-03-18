@@ -140,3 +140,17 @@ def all_rewrites(pattern, substitution, term):
         rewrites.append(result)
 
     return rewrites
+
+
+def apply_substs_to_rule(rule, substs):
+    if not substs:
+        return rule
+    bindings = {}
+    for subst in substs:
+        assert isinstance(subst.lhs, Variable)
+        bindings[subst.lhs.name] = subst.rhs
+    unifier = Unifier(success=True, bindings=bindings)
+    return RewriteRule(
+        pattern=expand(rule.pattern, unifier),
+        substitution=expand(rule.substitution, unifier),
+    )
