@@ -205,7 +205,7 @@ This "proof" contains a misstep.
         mul(A, e) = A
         mul(A, e) = mul(foo, mul(e, A))
     qed
-    ???> DerivationError: Could not derive mul(A, e) = mul(foo, mul(e, A)) from mul(A, e) = A
+    ???> Could not derive mul(A, e) = mul(foo, mul(e, A)) from mul(A, e) = A
 
 This theorem does not prove what it says it proves.
 
@@ -218,7 +218,7 @@ This theorem does not prove what it says it proves.
         A = A
         mul(A, e) = A
     qed
-    ???> DerivationError: No step in proof showed mul(A, e) = mul(A, A)
+    ???> No step in proof of unnamed_theorem_1 showed mul(A, e) = mul(A, A)
 
 Typically, all theorems that are given in the document are checked,
 and are checked in sequence, and checking stops at the first failure.
@@ -247,7 +247,7 @@ and are checked in sequence, and checking stops at the first failure.
         A = mul(A, e)
         mul(e, A) = mul(e, A)
     qed
-    ???> DerivationError: Could not derive mul(e, A) = mul(A, A) from A = mul(A, e)
+    ???> Could not derive mul(e, A) = mul(A, A) from A = mul(A, e)
 
 This proof requires rewrites on the right-hand side of the equation.
 

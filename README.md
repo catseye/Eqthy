@@ -90,8 +90,6 @@ TODO
 ----
 
 *   Handle "on LHS", "on RHS" in hints.
-*   Show the step number or line number in the error message when
-    there is a derivation error.
 *   Allow rules to be instantiated with variable names other than the
     ones that are specified in the rule.
 *   Allow context accumulated when verifying one document to be

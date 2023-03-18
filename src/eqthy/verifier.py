@@ -37,19 +37,19 @@ class Verifier:
         prev = None
         rewritten_eqn = None
         eqn_shown = False
-        for step in theorem.steps:
+        for step_num, step in enumerate(theorem.steps):
             if prev is None:
                 self.log("Verifying that {} follows from established rules", render(step.eqn))
                 if step.eqn.lhs == step.eqn.rhs:
                     rewritten_eqn = step.eqn
                     self.log("Confirmed that {} follows from Reflexivity", render(step.eqn))
                 else:
-                    raise DerivationError("Could not derive {} from established rules".format(render(step.eqn)))
+                    raise DerivationError("In step {} of {}: Could not derive {} from established rules".format(step_num + 1, theorem.name, render(step.eqn)))
             else:
                 self.log("Verifying that {} follows from {}", render(step.eqn), render(prev.eqn))
                 rewritten_eqn = self.obtain_rewritten_step(step, prev)
                 if not rewritten_eqn:
-                    raise DerivationError("Could not derive {} from {}".format(render(step.eqn), render(prev.eqn)))
+                    raise DerivationError("In step {} of {}: Could not derive {} from {}".format(step_num + 1, theorem.name, render(step.eqn), render(prev.eqn)))
 
             if rewritten_eqn == theorem.eqn:
                 self.log("With {} we have now shown the theorem {}".format(render(rewritten_eqn), render(theorem.eqn)))
@@ -57,7 +57,7 @@ class Verifier:
             prev = step
 
         if not eqn_shown:
-            raise DerivationError("No step in proof showed {}".format(render(theorem.eqn)))
+            raise DerivationError("No step in proof of {} showed {}".format(theorem.name, render(theorem.eqn)))
 
     def obtain_rewritten_step(self, step, prev):
         rules_to_try = self.rules
