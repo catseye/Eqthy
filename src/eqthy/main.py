@@ -42,7 +42,7 @@ def main(args):
         help="Tell the user about every little thing"
     )
     argparser.add_argument(
-        "--version", action="version", version="%(prog)s 0.1"
+        "--version", action="version", version="%(prog)s 0.2"
     )
 
     options = argparser.parse_args(args)
