@@ -4,8 +4,6 @@ Right Inverse for All is Left Inverse
 See [Right Inverse for All is Left Inverse](https://proofwiki.org/wiki/Right_Inverse_for_All_is_Left_Inverse)
 on proofwiki.org.
 
-TODO DRAFT
-
 First we need the semigroup axioms.
 
     axiom (#id-right)  mul(A, e) = A
@@ -28,15 +26,15 @@ as a lemma.
 Finally we need this proof.
 
     theorem (#right-inverse-for-semigroup-is-left-inverse)
-        // TODO FIXME DRAFT IN PROGRESS
-        // mul(A, inv(A)) = mul(inv(A), A)
-        mul(mul(mul(inv(A), A), inv(mul(inv(A), A))), inv(mul(inv(A), A))) = e
+        mul(inv(A), A) = e
     proof
         e = e
         mul(A, inv(A)) = e
-        mul(mul(A, e), inv(A)) = e
-        mul(mul(A, mul(A, inv(A))), inv(A)) = e
-        mul(mul(mul(A, A), inv(A)), inv(A)) = e
-        mul(mul(mul(mul(inv(A), A), mul(inv(A), A)), inv(mul(inv(A), A))), inv(mul(inv(A), A))) = e  [by substitution of mul(inv(A), A) into A]
-        mul(mul(mul(inv(A), A), inv(mul(inv(A), A))), inv(mul(inv(A), A))) = e  [by #product-of-semigroup-element-with-right-inverse-is-idempotent]
+        mul(mul(inv(A), A), inv(mul(inv(A), A))) = e
+                                                        [by substitution of mul(inv(A), A) into A]
+        mul(mul(mul(inv(A), A), mul(inv(A), A)), inv(mul(inv(A), A))) = e
+                                                        [by #product-of-semigroup-element-with-right-inverse-is-idempotent]
+        mul(mul(inv(A), A), mul(mul(inv(A), A), inv(mul(inv(A), A)))) = e
+        mul(mul(inv(A), A), e) = e
+        mul(inv(A), A) = e
     qed
