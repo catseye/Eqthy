@@ -6,11 +6,18 @@ on Wikiversity.
 
 Also see [Inverse of Product](https://proofwiki.org/wiki/Inverse_of_Product) on ProofWiki.
 
+First, the group axioms.  Note, we could define only `#id-right` and `#inv-right` as axioms,
+and derive `#id-left` and `#inv-left` from them; see
+[Right Inverse for All is Left Inverse](semigroup-right-inverse-is-left.eqthy.md), for instance.
+But for brevity we'll just define them as axioms here.
+
     axiom (#id-right)   mul(A, e) = A
     axiom (#id-left)    mul(e, A) = A
     axiom (#assoc)      mul(A, mul(B, C)) = mul(mul(A, B), C)
     axiom (#inv-right)  mul(A, inv(A)) = e
-    axiom (#inv-left)   mul(inv(A), A) = e  // FIXME: should be shown as a theorem
+    axiom (#inv-left)   mul(inv(A), A) = e
+
+Now, the theorem.
 
     theorem (#socks-and-shoes)
         inv(mul(A, B)) = mul(inv(B), inv(A))

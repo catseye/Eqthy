@@ -4,13 +4,13 @@ Right Inverse for All is Left Inverse
 See [Right Inverse for All is Left Inverse](https://proofwiki.org/wiki/Right_Inverse_for_All_is_Left_Inverse)
 on proofwiki.org.
 
-First we need the semigroup axioms.
+First we need the semigroup axioms (plus a right identity).
 
     axiom (#id-right)  mul(A, e) = A
     axiom (#assoc)     mul(A, mul(B, C)) = mul(mul(A, B), C)
     axiom (#inv-right) mul(A, inv(A)) = e
 
-Next we need "Product of Semigroup Element with Right Inverse is Idempotent"
+Next we need [Product of Semigroup Element with Right Inverse is Idempotent](semigroup-idempotence.eqthy.md)
 as a lemma.
 
     theorem (#product-of-semigroup-element-with-right-inverse-is-idempotent)
