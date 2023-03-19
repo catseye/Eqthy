@@ -93,7 +93,19 @@ TODO
 *   Allow context accumulated when verifying one document to be
     carried over and used when verifying the next documnet.
 *   Allow the first line of a proof to be an axiom.
+*   Scanner should report correct line number in errors
+    when Eqthy document is embedded in Markdown.
+*   Falderal tests for variable renaming (`with` syntax).
 *   Arity checking?  Would prevent some silly errors in axioms.
+
+### Desired Examples
+
+*   [Boolean algebra](https://en.wikipedia.org/wiki/Boolean_algebra)
+*   [Interior algebra](https://en.wikipedia.org/wiki/Interior_algebra)
+*   [Relation algebra](https://en.wikipedia.org/wiki/Relation_algebra)
+*   [Robbins algebra](https://en.wikipedia.org/wiki/Robbins_algebra) (also Huntington algebra)
+*   Johnson's 1892 axiom system given in Meredith and Prior's 1967 paper [Equational Logic](projecteuclid.org/download/pdf_1/euclid.ndjfl/1093893457)
+*   McNulty's course notes
 
 [Metamath]: https://us.metamath.org/
 [equational logic]: doc/Equational-Logic.md
