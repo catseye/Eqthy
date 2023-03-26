@@ -153,3 +153,18 @@ Let's try to prove some maybe useful preliminaries.
         or(not(0), 0) = 1
         not(0) = 1
     qed
+
+    theorem
+        not(not(A)) = A
+    proof
+        1 = 1
+        1 = or(A, not(A))
+        1 = or(not(A), A)
+        or(not(not(A)), 1) = or(not(not(A)), or(not(A), A))     [by congruence of X and or(not(not(A)), X)]
+        not(not(A)) = or(not(not(A)), or(not(A), A))
+        not(not(A)) = or(or(not(not(A)), not(A)), A)
+        not(not(A)) = or(or(not(A), not(not(A))), A)
+        not(not(A)) = or(1, A)
+        not(not(A)) = or(A, 1)
+        not(not(A)) = A
+    qed
