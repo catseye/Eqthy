@@ -60,23 +60,33 @@ other lemmas were adapted from the other sources, including
         and(X, X) = X
     qed
 
-     theorem (#and-annihil)
-        and(A, 0) = 0
-     proof
-        0 = 0
-        and(A, not(A)) = 0
-        and(and(A, A), not(A)) = 0
-        and(A, and(A, not(A))) = 0
-        and(A, 0) = 0
-     qed
+    theorem (#or-annihil)
+        or(X, 1) = 1
+    proof
+        1 = 1
+        or(X, not(X)) = 1                     [by #or-comp with A=X]
+        or(or(X, X), not(X)) = 1
+        or(X, or(X, not(X))) = 1
+        or(X, 1) = 1
+    qed
 
-     theorem
+    theorem (#and-annihil)
+        and(X, 0) = 0
+    proof
+        0 = 0
+        and(X, not(X)) = 0                     [by #and-comp with A=X]
+        and(and(X, X), not(X)) = 0
+        and(X, and(X, not(X))) = 0
+        and(X, 0) = 0
+    qed
+
+    theorem
         and(and(A, B), or(not(A), not(B))) = 0
-     proof
+    proof
         0 = 0
         or(0, 0) = 0
-        or(0, and(A, 0)) = 0
-        or(and(B, 0), and(A, 0)) = 0                                [by #and-annihil with A=B]
+        or(0, and(A, 0)) = 0                                        [by #and-annihil with X=A]
+        or(and(B, 0), and(A, 0)) = 0                                [by #and-annihil with X=B]
         or(and(0, B), and(A, 0)) = 0
         or(and(and(A, not(A)), B), and(A, 0)) = 0
         or(and(and(not(A), A), B), and(A, 0)) = 0
@@ -85,4 +95,39 @@ other lemmas were adapted from the other sources, including
         or(and(and(A, B), not(A)), and(A, and(B, not(B)))) = 0      [by #and-comp with A=B]
         or(and(and(A, B), not(A)), and(and(A, B), not(B))) = 0
         and(and(A, B), or(not(A), not(B))) = 0
-     qed
+    qed
+
+    theorem
+        or(and(A, B), or(not(A), not(B))) = 1
+    proof
+        1 = 1
+        or(not(A), 1) = 1                          [by #or-annihil with X=not(A)]
+        or(1, not(A)) = 1
+        or(or(B, not(B)), not(A)) = 1              [by #or-comp with A=B]
+        or(or(not(B), B), not(A)) = 1
+        or(not(B), or(B, not(A))) = 1
+        or(or(B, not(A)), not(B)) = 1
+        or(and(or(B, not(A)), 1), not(B)) = 1
+        or(and(1, or(B, not(A))), not(B)) = 1
+        or(and(1, or(not(A), B)), not(B)) = 1
+        or(    and(or(A, not(A)), or(not(A), B)),     not(B)) = 1
+        or(    and(or(A, not(A)), or(B, not(A))),     not(B)) = 1
+        or(    and(or(not(A), A), or(B, not(A))),     not(B)) = 1
+        or(    and(or(not(A), A), or(not(A), B)),     not(B)) = 1
+        or(    or(not(A), and(A, B)),                 not(B)) = 1       [by #or-dist]
+        or(    or(and(A, B), not(A)),                 not(B)) = 1
+        or(and(A, B), or(not(A), not(B))) = 1
+    qed
+
+Unfortunately, the remaining step of Arturo Magidin's approach isn't equational;
+basically it's
+
+>     From
+>       and(and(A, B), or(not(A), not(B))) = 0
+>     and
+>       or(and(A, B), or(not(A), not(B))) = 1
+>     infer
+>       and(A, B) = or(not(A), not(B))
+
+which is not equational.  Will need to figure out if we can phrase
+this purely equationally.
