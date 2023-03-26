@@ -127,7 +127,29 @@ basically it's
 >     and
 >       or(and(A, B), or(not(A), not(B))) = 1
 >     infer
->       and(A, B) = or(not(A), not(B))
+>       not(and(A, B)) = or(not(A), not(B))
 
 which is not equational.  Will need to figure out if we can phrase
 this purely equationally.
+
+Let's try to prove some maybe useful preliminaries.
+
+    theorem
+        not(1) = 0
+    proof
+        0 = 0
+        and(A, not(A)) = 0
+        and(1, not(1)) = 0      [by substitution of 1 into A]
+        and(not(1), 1) = 0
+        not(1) = 0
+    qed
+
+    theorem
+        not(0) = 1
+    proof
+        1 = 1
+        or(A, not(A)) = 1
+        or(0, not(0)) = 1      [by substitution of 0 into A]
+        or(not(0), 0) = 1
+        not(0) = 1
+    qed
