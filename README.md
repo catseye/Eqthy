@@ -36,8 +36,9 @@ the **[eg/](eg/)** directory.  In particular, there are worked-out proofs:
 
 *   of the [Socks and Shoes](eg/socks-and-shoes.eqthy.md) theorem in group theory
 *   in [Propositional Algebra](eg/propositional-algebra.eqthy.md)
-*   in [Boolean Algebra](eg/boolean-algebra.eqthy.md), working towards a proof
-    of de Morgan's laws
+*   in [Boolean Algebra](eg/boolean-algebra.eqthy.md), giving lemmas that could
+    be used in a proof of De Morgan's laws
+*   in [Combinatory Logic](eg/combinatory-logic.eqthy.md)
 
 with hopefully more to come in the future.
 
