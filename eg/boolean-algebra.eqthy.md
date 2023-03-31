@@ -15,11 +15,17 @@ For more information, see
     axiom (#and-dist)       and(A, or(B, C)) = or(and(A, B), and(A, C))
     axiom (#and-comp)       and(A, not(A)) = 0
 
-Some basic lemmas, leading up to, we hope, a proof of de Morgan's laws.
+We'll now establish some basic lemmas based on these axioms.
+These in turn could, in another setting, provide support for
+a proof of De Morgan's Laws.  In this purely equational setting though,
+for reasons I'll explain below, we won't actually be able to give
+a proof De Morgan's Laws using them.  Still, the lemmas
+are instructive, could be useful for other proofs, and serve
+the point of exercising the Eqthy language and its proof-checkers.
+
 For the most part, these follow the lemmas given in
-[this stackexchange answer](https://math.stackexchange.com/a/95884) by Arturo Magidin.
-However, since some of those lemmas rely on properties that are not proved there,
-other lemmas were adapted from the other sources, including
+[this stackexchange answer](https://math.stackexchange.com/a/95884) by Arturo Magidin
+and, where those are lacking,
 [this stackexchange answer](https://math.stackexchange.com/a/2111450) by Kanwaljit Singh.
 
     theorem (#or-ident)
@@ -119,8 +125,8 @@ other lemmas were adapted from the other sources, including
         or(and(A, B), or(not(A), not(B))) = 1
     qed
 
-Unfortunately, the remaining step of Arturo Magidin's approach isn't equational;
-basically it's
+Unfortunately, the remaining step that Arturo Magidin gives (essentially
+following Huntington's 1904 approach), which is basically
 
 >     From
 >       and(and(A, B), or(not(A), not(B))) = 0
@@ -129,10 +135,18 @@ basically it's
 >     infer
 >       not(and(A, B)) = or(not(A), not(B))
 
-which is not equational.  Will need to figure out if we can phrase
-this purely equationally.
+is not expressible in equational logic, so can't be written in Eqthy.
+This is why I said above that we would not be able to follow this
+path of lemmas all the way to a proof of De Morgan's Laws.
 
-Let's try to prove some maybe useful preliminaries.
+(There _is_ a purely equational proof of De Morgan's Laws; I know this
+because I asked the E prover to find one, and it did so.  I would
+need to translate it into Eqthy to include it here, and I haven't
+done so yet.  I also don't know yet how much similarity it bears to
+Huntington's approach.)
+
+In the meantime however, we can state a couple of other potentially
+useful lemmas involving `not`.
 
     theorem
         not(1) = 0
