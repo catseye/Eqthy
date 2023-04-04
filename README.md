@@ -98,7 +98,6 @@ TODO
 *   Allow the first line of a proof to be an axiom.
 *   Scanner should report correct line number in errors
     when Eqthy document is embedded in Markdown.
-*   Falderal tests for variable renaming (`with` syntax).
 *   Arity checking?  Would prevent some silly errors in axioms.
 
 ### Desired Examples

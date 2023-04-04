@@ -7,7 +7,7 @@ Description of the Language
 An Eqthy document consists of any number of axioms and theorems.  Each
 axiom is an equation.  An equation equates two terms.  Terms consist of
 constructors (also called function symbols) and variables.  Variables begin
-with uppercase letters.  Constructors begin with lowercase letters are
+with uppercase letters.  Constructors begin with lowercase letters and are
 followed by a list of zero or more subterms, enclosed in parentheses.  If a
 term has no subterms, it is called an "atom" and the parentheses may be
 omitted.
@@ -365,6 +365,20 @@ is incorrect.  It is reasonable to (at least) warn the user of this mistake.
         A = mul(A, A)   [by idcomm]
     qed
     ???> Could not derive A = mul(A, A) from A = mul(e, A)
+
+When naming an axiom or theorem in a hint, variables used in that
+axiom or theorem can be renamed before it is applied to the current step.
+
+    axiom (idright) mul(A, e) = A
+    axiom (idleft)  mul(e, A) = A
+    axiom (assoc)   mul(A, mul(B, C)) = mul(mul(A, B), C)
+    theorem
+        R = mul(R, e)
+    proof
+        R = R
+        R = mul(R, e)  [by idright with A=R]
+    qed
+    ===> ok
 
 Using the reflexivity hint when the rule used was not actually reflexivity
 is incorrect.  It is reasonable to (at least) warn the user of this mistake.
