@@ -1,5 +1,7 @@
-from collections import namedtuple
-
+from eqthy.objects import (
+    Document, Axiom, Theorem, Step,
+    Reflexivity, Substitution, Congruence, Reference
+)
 from eqthy.scanner import Scanner, EqthySyntaxError
 from eqthy.terms import Term, Variable, Eqn
 
@@ -12,19 +14,9 @@ from eqthy.terms import Term, Variable, Eqn
 # Hint     := "reflexivity"
 #           | "substitution" "of" Term "into" Var
 #           | "congruence" "of" Var "and" Term
-#           | Ident ["on" ("LHS" | "RHS")].
+#           | Ident ["on" ("LHS" | "RHS")] ["with" Subst {"," Subst}].
 # Eqn      := Term "=" Term.
 # Term     := Var | Ctor ["(" [Term {"," Term} ")"].
-
-
-Document = namedtuple('Document', ['axioms', 'theorems'])
-Axiom = namedtuple('Axiom', ['name', 'eqn'])
-Theorem = namedtuple('Theorem', ['name', 'eqn', 'steps'])
-Step = namedtuple('Step', ['eqn', 'hint'])
-Reflexivity = namedtuple('Reflexivity', [])
-Substitution = namedtuple('Substitution', ['term', 'variable'])
-Congruence = namedtuple('Congruence', ['variable', 'term'])
-Reference = namedtuple('Reference', ['name', 'side'])
 
 
 class Parser(object):
@@ -41,7 +33,11 @@ class Parser(object):
         while self.scanner.on('theorem'):
             theorems.append(self.theorem())
         if not (axioms or theorems):
-            raise EqthySyntaxError(self.scanner.filename, self.scanner.line_number, "Eqthy document is empty")
+            raise EqthySyntaxError(
+                self.scanner.filename,
+                self.scanner.line_number,
+                "Eqthy document is empty"
+            )
         return Document(axioms=axioms, theorems=theorems)
 
     def axiom(self):
@@ -104,6 +100,7 @@ class Parser(object):
         else:
             name = self.scanner.token
             side = None
+            substs = []
             self.scanner.scan()
             if self.scanner.consume('on'):
                 if self.scanner.on('LHS') or self.scanner.on('RHS'):
@@ -111,7 +108,11 @@ class Parser(object):
                     self.scanner.scan()
                 else:
                     self.scanner.syntax_error("Expected 'LHS' or 'RHS'")
-            return Reference(name=name, side=side)
+            if self.scanner.consume('with'):
+                substs.append(self.eqn())
+                while self.scanner.consume(','):
+                    substs.append(self.eqn())
+            return Reference(name=name, side=side, substs=substs)
 
     def eqn(self):
         lhs = self.term()

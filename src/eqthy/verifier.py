@@ -1,6 +1,5 @@
-# TODO: these should probably come from a "eqthy.hints" module
-from eqthy.parser import Reflexivity, Substitution, Congruence, Reference
-from eqthy.terms import Eqn, all_rewrites, render, RewriteRule, replace
+from eqthy.objects import Reflexivity, Substitution, Congruence, Reference
+from eqthy.terms import Eqn, all_rewrites, render, RewriteRule, replace, apply_substs_to_rule
 
 
 class DerivationError(Exception):
@@ -16,45 +15,41 @@ class Verifier:
         self.rules = {}
 
         for axiom in self.axioms:
-            lhs = axiom.eqn.lhs
-            rhs = axiom.eqn.rhs
-            self.log("Registering axiom [{}]: {} = {}", render(axiom.name), render(lhs), render(rhs))
-            self.rules[axiom.name + '_1'] = RewriteRule(pattern=lhs, substitution=rhs)
-            self.rules[axiom.name + '_2'] = RewriteRule(pattern=rhs, substitution=lhs)
+            self.register(axiom.name, axiom.eqn.lhs, axiom.eqn.rhs)
 
     def log(self, msg, *args):
         if self.verbose:
             print(msg.format(*args))
 
+    def register(self, name, lhs, rhs):
+        self.log("Registering rule [{}]: {} = {}", render(name), render(lhs), render(rhs))
+        self.rules[name + '_1'] = RewriteRule(pattern=lhs, substitution=rhs)
+        self.rules[name + '_2'] = RewriteRule(pattern=rhs, substitution=lhs)
+
     def verify(self):
         for theorem in self.theorems:
-            self.log("Verifying theorem [{}]", render(theorem.name))
             self.verify_theorem(theorem)
-            lhs = theorem.eqn.lhs
-            rhs = theorem.eqn.rhs
-            self.rules[theorem.name + '_1'] = RewriteRule(pattern=lhs, substitution=rhs)
-            self.rules[theorem.name + '_2'] = RewriteRule(pattern=rhs, substitution=lhs)
-        # TODO update context with axioms and proved theorems
+            self.register(theorem.name, theorem.eqn.lhs, theorem.eqn.rhs)
         return self.context
 
     def verify_theorem(self, theorem):
-        self.log("Verifying theorem {}", render(theorem.eqn))
+        self.log("Verifying theorem [{}]: {}", render(theorem.name), render(theorem.eqn))
         prev = None
         rewritten_eqn = None
         eqn_shown = False
-        for step in theorem.steps:
+        for step_num, step in enumerate(theorem.steps):
             if prev is None:
                 self.log("Verifying that {} follows from established rules", render(step.eqn))
                 if step.eqn.lhs == step.eqn.rhs:
                     rewritten_eqn = step.eqn
                     self.log("Confirmed that {} follows from Reflexivity", render(step.eqn))
                 else:
-                    raise DerivationError("Could not derive {} from established rules".format(render(step.eqn)))
+                    raise DerivationError("In step {} of {}: Could not derive {} from established rules".format(step_num + 1, theorem.name, render(step.eqn)))
             else:
                 self.log("Verifying that {} follows from {}", render(step.eqn), render(prev.eqn))
                 rewritten_eqn = self.obtain_rewritten_step(step, prev)
                 if not rewritten_eqn:
-                    raise DerivationError("Could not derive {} from {}".format(render(step.eqn), render(prev.eqn)))
+                    raise DerivationError("In step {} of {}: Could not derive {} from {}".format(step_num + 1, theorem.name, render(step.eqn), render(prev.eqn)))
 
             if rewritten_eqn == theorem.eqn:
                 self.log("With {} we have now shown the theorem {}".format(render(rewritten_eqn), render(theorem.eqn)))
@@ -62,7 +57,7 @@ class Verifier:
             prev = step
 
         if not eqn_shown:
-            raise DerivationError("No step in proof showed {}".format(render(theorem.eqn)))
+            raise DerivationError("No step in proof of {} showed {}".format(theorem.name, render(theorem.eqn)))
 
     def obtain_rewritten_step(self, step, prev):
         rules_to_try = self.rules
@@ -126,6 +121,6 @@ class Verifier:
             if step.hint.name + '_1' not in self.rules:
                 raise DerivationError("Rule named {} has not been established".format(step.hint.name))
             rules = {}
-            rules[step.hint.name + '_1'] = self.rules[step.hint.name + '_1']
-            rules[step.hint.name + '_2'] = self.rules[step.hint.name + '_2']
+            rules[step.hint.name + '_1'] = apply_substs_to_rule(self.rules[step.hint.name + '_1'], step.hint.substs)
+            rules[step.hint.name + '_2'] = apply_substs_to_rule(self.rules[step.hint.name + '_2'], step.hint.substs)
             return rules

@@ -7,7 +7,7 @@ Description of the Language
 An Eqthy document consists of any number of axioms and theorems.  Each
 axiom is an equation.  An equation equates two terms.  Terms consist of
 constructors (also called function symbols) and variables.  Variables begin
-with uppercase letters.  Constructors begin with lowercase letters are
+with uppercase letters.  Constructors begin with lowercase letters and are
 followed by a list of zero or more subterms, enclosed in parentheses.  If a
 term has no subterms, it is called an "atom" and the parentheses may be
 omitted.
@@ -205,7 +205,7 @@ This "proof" contains a misstep.
         mul(A, e) = A
         mul(A, e) = mul(foo, mul(e, A))
     qed
-    ???> DerivationError: Could not derive mul(A, e) = mul(foo, mul(e, A)) from mul(A, e) = A
+    ???> Could not derive mul(A, e) = mul(foo, mul(e, A)) from mul(A, e) = A
 
 This theorem does not prove what it says it proves.
 
@@ -218,7 +218,7 @@ This theorem does not prove what it says it proves.
         A = A
         mul(A, e) = A
     qed
-    ???> DerivationError: No step in proof showed mul(A, e) = mul(A, A)
+    ???> No step in proof of unnamed_theorem_1 showed mul(A, e) = mul(A, A)
 
 Typically, all theorems that are given in the document are checked,
 and are checked in sequence, and checking stops at the first failure.
@@ -247,7 +247,7 @@ and are checked in sequence, and checking stops at the first failure.
         A = mul(A, e)
         mul(e, A) = mul(e, A)
     qed
-    ???> DerivationError: Could not derive mul(e, A) = mul(A, A) from A = mul(A, e)
+    ???> Could not derive mul(e, A) = mul(A, A) from A = mul(A, e)
 
 This proof requires rewrites on the right-hand side of the equation.
 
@@ -365,6 +365,20 @@ is incorrect.  It is reasonable to (at least) warn the user of this mistake.
         A = mul(A, A)   [by idcomm]
     qed
     ???> Could not derive A = mul(A, A) from A = mul(e, A)
+
+When naming an axiom or theorem in a hint, variables used in that
+axiom or theorem can be renamed before it is applied to the current step.
+
+    axiom (idright) mul(A, e) = A
+    axiom (idleft)  mul(e, A) = A
+    axiom (assoc)   mul(A, mul(B, C)) = mul(mul(A, B), C)
+    theorem
+        R = mul(R, e)
+    proof
+        R = R
+        R = mul(R, e)  [by idright with A=R]
+    qed
+    ===> ok
 
 Using the reflexivity hint when the rule used was not actually reflexivity
 is incorrect.  It is reasonable to (at least) warn the user of this mistake.

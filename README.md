@@ -1,7 +1,7 @@
 Eqthy
 =====
 
-_Version 0.1_ | _See also:_ [Philomath](https://github.com/catseye/Philomath#readme)
+_Version 0.2_ | _See also:_ [Philomath](https://github.com/catseye/Philomath#readme)
 ∘ [LCF-style-ND](https://github.com/cpressey/LCF-style-ND#readme)
 
 - - - -
@@ -34,8 +34,11 @@ tests, see **[doc/Eqthy.md](doc/Eqthy.md)**.
 A number of proofs have been written in Eqthy to date.  These can be found in
 the **[eg/](eg/)** directory.  In particular, there are worked-out proofs:
 
-*   of the [Socks and Shoes](eg/socks-and-shoes.eqthy.md) theorem in group theory
-*   in [Propositional Algebra](eg/propositional-algebra.eqthy.md)
+*   of the [Socks and Shoes](eg/socks-and-shoes.eqthy.md) theorem in group theory;
+*   in [Propositional Algebra](eg/propositional-algebra.eqthy.md);
+*   in [Boolean Algebra](eg/boolean-algebra.eqthy.md), giving lemmas that could
+    be used in a proof of De Morgan's laws;
+*   in [Combinatory Logic](eg/combinatory-logic.eqthy.md),
 
 with hopefully more to come in the future.
 
@@ -90,14 +93,19 @@ TODO
 ----
 
 *   Handle "on LHS", "on RHS" in hints.
-*   Show the step number or line number in the error message when
-    there is a derivation error.
-*   Allow rules to be instantiated with variable names other than the
-    ones that are specified in the rule.
 *   Allow context accumulated when verifying one document to be
     carried over and used when verifying the next documnet.
 *   Allow the first line of a proof to be an axiom.
+*   Scanner should report correct line number in errors
+    when Eqthy document is embedded in Markdown.
 *   Arity checking?  Would prevent some silly errors in axioms.
+
+### Desired Examples
+
+*   [Interior algebra](https://en.wikipedia.org/wiki/Interior_algebra) (corresponding to the modal logic S4)
+*   [Relation algebra](https://en.wikipedia.org/wiki/Relation_algebra)
+*   Johnson's 1892 axiom system given in Meredith and Prior's 1967 paper [Equational Logic](projecteuclid.org/download/pdf_1/euclid.ndjfl/1093893457)
+*   The theorem of ring theory given in [Equational Logic, Spring 2017](https://people.math.sc.edu/mcnulty/alglatvar/equationallogic.pdf) by McNulty (but it's a bit of a monster all right)
 
 [Metamath]: https://us.metamath.org/
 [equational logic]: doc/Equational-Logic.md

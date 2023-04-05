@@ -125,7 +125,7 @@ def replace(term, target, replacement):
 
 
 def all_rewrites(pattern, substitution, term):
-    """Given a term, and a rule (a pattern and a substitution), return
+    """Given a rule (a pattern and a substitution) and a term, return
     a list of the terms that would result from rewriting the term
     in all the possible ways by the rule."""
 
@@ -140,3 +140,17 @@ def all_rewrites(pattern, substitution, term):
         rewrites.append(result)
 
     return rewrites
+
+
+def apply_substs_to_rule(rule, substs):
+    if not substs:
+        return rule
+    bindings = {}
+    for subst in substs:
+        assert isinstance(subst.lhs, Variable)
+        bindings[subst.lhs.name] = subst.rhs
+    unifier = Unifier(success=True, bindings=bindings)
+    return RewriteRule(
+        pattern=expand(rule.pattern, unifier),
+        substitution=expand(rule.substitution, unifier),
+    )
