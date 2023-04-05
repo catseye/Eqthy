@@ -19,7 +19,7 @@ Implementation:
 
 Distribution:
 
-*   Simplified the proof in the Propositional Algebra docuent.
+*   Simplified the proof in the Propositional Algebra document.
 *   Added example documents containing proofs in Boolean Algebra
     and Combinatory Logic.
 *   Added a few more proofs in group theory, involving inverses.
