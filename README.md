@@ -104,7 +104,7 @@ TODO
 
 *   [Interior algebra](https://en.wikipedia.org/wiki/Interior_algebra) (corresponding to the modal logic S4)
 *   [Relation algebra](https://en.wikipedia.org/wiki/Relation_algebra)
-*   Johnson's 1892 axiom system given in Meredith and Prior's 1967 paper [Equational Logic](projecteuclid.org/download/pdf_1/euclid.ndjfl/1093893457)
+*   Johnson's 1892 axiom system given in Meredith and Prior's 1967 paper [Equational Logic](https://projecteuclid.org/download/pdf_1/euclid.ndjfl/1093893457)
 *   The theorem of ring theory given in [Equational Logic, Spring 2017](https://people.math.sc.edu/mcnulty/alglatvar/equationallogic.pdf) by McNulty (but it's a bit of a monster all right)
 
 [Metamath]: https://us.metamath.org/
