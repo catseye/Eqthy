@@ -52,7 +52,7 @@ def match(pattern, term):
         })
     else:
         assert isinstance(pattern, Term)
-        if not isinstance(term, Term) or len(term.subterms) != len(pattern.subterms):
+        if not isinstance(term, Term) or term.ctor != pattern.ctor or len(term.subterms) != len(pattern.subterms):
             return unify_fail
         unifier = Unifier(success=True, bindings={})
         for (subpattern, subterm) in zip(pattern.subterms, term.subterms):
