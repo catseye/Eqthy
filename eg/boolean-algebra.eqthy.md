@@ -171,14 +171,16 @@ useful lemmas involving `not`.
     theorem
         not(not(A)) = A
     proof
-        1 = 1
-        1 = or(A, not(A))
-        1 = or(not(A), A)
-        or(not(not(A)), 1) = or(not(not(A)), or(not(A), A))     [by congruence of X and or(not(not(A)), X)]
-        not(not(A)) = or(not(not(A)), or(not(A), A))
-        not(not(A)) = or(or(not(not(A)), not(A)), A)
-        not(not(A)) = or(or(not(A), not(not(A))), A)
-        not(not(A)) = or(1, A)
-        not(not(A)) = or(A, 1)
+        and(or(not(not(A)), A), 1) = and(or(not(not(A)), A), 1)
+        and(or(not(not(A)), A), 1) = and(or(A, not(not(A))), 1)
+        and(or(not(not(A)), A), 1) = and(or(A, not(not(A))), or(A, not(A)))
+        and(or(not(not(A)), A), 1) = or(A, and(not(not(A)), not(A)))
+        and(or(not(not(A)), A), 1) = or(A, and(not(A), not(not(A))))
+        and(or(not(not(A)), A), 1) = or(A, 0)
+        and(or(not(not(A)), A), 1) = A
+        and(or(not(not(A)), A), or(not(A), not(not(A)))) = A          [by #or-comp with A=not(A)]
+        and(or(not(not(A)), A), or(not(not(A)), not(A))) = A
+        or(not(not(A)), and(A, not(A))) = A
+        or(not(not(A)), 0) = A
         not(not(A)) = A
     qed
