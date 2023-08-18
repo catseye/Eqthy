@@ -135,6 +135,15 @@ This document consists of some axioms and a theorem.
     qed
     ===> ok
 
+A document need not have any axioms.
+
+    theorem
+        a = a
+    proof
+        a = a
+    qed
+    ===> ok
+
 A document may contain more than one theorem.
 
     axiom mul(A, e) = A
