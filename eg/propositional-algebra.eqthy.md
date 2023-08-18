@@ -13,11 +13,12 @@ The order that the theorems appear in the list does not matter.
     axiom (#th-comm)  th(X, th(Y, Z)) = th(Y, th(X, Z))
 
 The logic system is a Hilbert-style system, with three axioms.
-In Barnes and Mack, the axioms are given "semantically", using set comprehensions:
+In Barnes and Mack, the axioms are given "semantically", using set comprehensions
+(p. 15):
 
-> A1 = {p => (q => p) | p, q elem P(X)}  
-> A2 = {(p => (q => r)) => ((p => q) => (p => r)) | p, q, r elem P(X)}  
-> A3 = {~~p => p | p elem P(X)}  
+> A1 = {_p_ ⇒ (_q_ ⇒ _p_) | _p_, _q_ ∈ _P_(_X_)}  
+> A2 = {(_p_ ⇒ (_q_ ⇒ _r_)) ⇒ ((_p_ ⇒ _q_) ⇒ (_p_ ⇒ _r_)) | _p_, _q_, _r_ ∈ _P_(_X_)}  
+> A3 = {~~_p_ ⇒ _p_ | _p_ ∈ _P_(_X_)}  
 
 We model this by saying that any set of theorems T is equal to T with any of these
 extra axiomatic statements added to it.
@@ -26,14 +27,15 @@ extra axiomatic statements added to it.
     axiom (#A2) th(X, e) = th(X, th(impl(impl(P, impl(Q, R)), impl(impl(P, Q), impl(P, R))), e))
     axiom (#A3) th(X, e) = th(X, th(impl(not(not(P)), P), e))
 
-In addition, we have modus ponens ("from p and p => q, deduce q"):
+In addition, we have modus ponens ("from _p_ and _p_ ⇒ _q_, deduce _q_"):
+(**note** that this axiom is currently a flawed translation of this rule!)
 
     axiom (#MP) th(P, th(impl(P, Q), e)) = th(Q, e)
 
 I believe this is all we need to make this work.  So, let's pick a simple proof and write it up
 and see if the `eqthy` checker can confirm it.  Example 4.5 on page 16 of Barnes and Mack:
 
->   |- p => p
+>   ⊢ _p_ ⇒ _p_
 
 We write this in equational logic by saying that any set of theorems is equal to a
 set of theorems which contains this theorem.
@@ -43,11 +45,11 @@ set of theorems which contains this theorem.
 
 The proof given in the book is
 
-> p1 = p => ((p => p) => p)  [by #axiom-1]  
-> p2 = (p => ((p => p) => p)) => ((p => (p => p)) => (p=>p))  [by #axiom-2]  
-> p3 = (p => (p => p)) => (p => p)  [p2 = p1 => p3]  
-> p4 = p => (p => p)  [by #axiom-1]  
-> p5 = p => p  [p3 = p4 => p5]  
+> p1 = p ⇒ ((p ⇒ p) ⇒ p)  [by A1]  
+> p2 = (p ⇒ ((p ⇒ p) ⇒ p)) ⇒ ((p ⇒ (p ⇒ p)) ⇒ (p⇒p))  [by A2]  
+> p3 = (p ⇒ (p ⇒ p)) ⇒ (p ⇒ p)  [p2 = p1 ⇒ p3]  
+> p4 = p ⇒ (p ⇒ p)  [by A1]  
+> p5 = p ⇒ p  [p3 = p4 ⇒ p5]  
 
 And now we... mechanically translate that...
 
