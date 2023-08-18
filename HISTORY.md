@@ -1,6 +1,27 @@
 History of Eqthy
 ================
 
+0.3
+---
+
+Implementation:
+
+*   A bug where two terms could unify even though they have
+    different constructors was discovered and fixed by
+    Proloy Mishra (@pro465), who also repaired the proof in
+    `boolean-algebra.eqthy.md` that had passed checking
+    only due to this bug.
+*   Slightly improved logging produced in `--verbose` mode.
+
+Distribution:
+
+*   The axiom system used in `propositional-algebra.eqthy.md`
+    was identified to be inconsistent, also by @pro465.  The
+    axiom was replaced with one that is probably not
+    inconsistent, and the proof was repaired (although not
+    in a particularly satisfying way -- the whole thing could
+    stand to be done in a simpler way, if possible).
+
 0.2
 ---
 

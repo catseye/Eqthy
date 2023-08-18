@@ -1,7 +1,7 @@
 Eqthy
 =====
 
-_Version 0.2_ | _See also:_ [Philomath](https://github.com/catseye/Philomath#readme)
+_Version 0.3_ | _See also:_ [Philomath](https://github.com/catseye/Philomath#readme)
 ∘ [LCF-style-ND](https://github.com/cpressey/LCF-style-ND#readme)
 
 - - - -
