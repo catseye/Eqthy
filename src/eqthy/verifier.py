@@ -73,20 +73,20 @@ class Verifier:
         # if no hint or hint resolution punted, search for rule to apply
 
         for (name, rule) in rules_to_try.items():
-            self.log("  Trying to rewrite lhs {} with {}", render(prev.eqn.lhs), render(rule))
+            self.log("  Trying to rewrite lhs {} with:\n    {}", render(prev.eqn.lhs), render(rule))
             for rewritten_lhs in all_rewrites(rule.pattern, rule.substitution, prev.eqn.lhs):
-                self.log("    Using {}, rewrote {} to {}", render(rule), render(prev.eqn.lhs), render(rewritten_lhs))
+                self.log("    ! Rewrote to {}", render(rewritten_lhs))
                 rewritten_eqn = Eqn(rewritten_lhs, prev.eqn.rhs)
                 if step.eqn == rewritten_eqn:
-                    self.log("    Can rewrite lhs to obtain: {}", render(rewritten_eqn))
+                    self.log("    !! Can rewrite lhs to obtain: {}", render(rewritten_eqn))
                     return rewritten_eqn
 
-            self.log("  Trying to rewrite rhs {} with {}", render(prev.eqn.rhs), render(rule))
+            self.log("  Trying to rewrite rhs {} with:\n    {}", render(prev.eqn.rhs), render(rule))
             for rewritten_rhs in all_rewrites(rule.pattern, rule.substitution, prev.eqn.rhs):
-                self.log("    Using {}, rewrote {} to {}", render(rule), render(prev.eqn.rhs), render(rewritten_rhs))
+                self.log("    ! Rewrote to {}", render(rewritten_rhs))
                 rewritten_eqn = Eqn(prev.eqn.lhs, rewritten_rhs)
                 if step.eqn == rewritten_eqn:
-                    self.log("    Can rewrite rhs to obtain: {}", render(rewritten_eqn))
+                    self.log("    !! Can rewrite rhs to obtain: {}", render(rewritten_eqn))
                     return rewritten_eqn
 
     def resolve_step_hint(self, step, prev):
