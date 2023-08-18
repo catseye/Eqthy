@@ -39,14 +39,14 @@ class Verifier:
         eqn_shown = False
         for step_num, step in enumerate(theorem.steps):
             if prev is None:
-                self.log("Verifying that {} follows from established rules", render(step.eqn))
+                self.log("=> Verifying that {} follows from established rules", render(step.eqn))
                 if step.eqn.lhs == step.eqn.rhs:
                     rewritten_eqn = step.eqn
                     self.log("Confirmed that {} follows from Reflexivity", render(step.eqn))
                 else:
                     raise DerivationError("In step {} of {}: Could not derive {} from established rules".format(step_num + 1, theorem.name, render(step.eqn)))
             else:
-                self.log("Verifying that {} follows from {}", render(step.eqn), render(prev.eqn))
+                self.log("=> Verifying that {} follows from {}", render(step.eqn), render(prev.eqn))
                 rewritten_eqn = self.obtain_rewritten_step(step, prev)
                 if not rewritten_eqn:
                     raise DerivationError("In step {} of {}: Could not derive {} from {}".format(step_num + 1, theorem.name, render(step.eqn), render(prev.eqn)))
