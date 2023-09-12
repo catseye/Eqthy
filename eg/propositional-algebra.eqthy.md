@@ -41,14 +41,10 @@ set of theorems which contains this theorem.
 
 Unfortunately, with the machinery that we've got so far, even though we
 only care that the resulting set contains `impl(P, P)`, we show much more than
-that -- we show all the intermediate results in getting there.
+that -- we show all the intermediate results in getting there. So, we have to work backwards -- removing the inetermediate results using the same axioms used to add them -- for all the theorems except the desired theorem (`impl(P, P)`).
 
     theorem
-        th(X, e) = th(X, th(impl(P, impl(impl(P, P), P)),
-                         th(impl(impl(P, impl(impl(P, P), P)), impl(impl(P, impl(P, P)), impl(P, P))),
-                         th(impl(P, P),
-                         th(impl(P, impl(P, P)),
-                         th(impl(impl(P, impl(P, P)), impl(P, P)), e))))))
+        th(X, e) = th(X, th(impl(P, P), e))
 
 The proof given in the book is
 
@@ -71,10 +67,6 @@ And now we... mechanically translate that...
         th(X, e) = th(X, th(impl(P, impl(impl(P, P), P)),
                          th(impl(impl(P, impl(impl(P, P), R)), impl(impl(P, impl(P, P)), impl(P, R))), e)))
                                                                     [by substitution of impl(P, P) into Q]
-
-        th(X, e) = th(X, th(impl(P, impl(impl(P, P), P)),
-                         th(impl(impl(P, impl(impl(P, P), P)), impl(impl(P, impl(P, P)), impl(P, P))), e)))
-                                                                    [by substitution of P into R]
 
         th(X, e) = th(X, th(impl(P, impl(impl(P, P), P)),
                          th(impl(impl(P, impl(impl(P, P), P)), impl(impl(P, impl(P, P)), impl(P, P))), e)))
@@ -119,6 +111,56 @@ And now we... mechanically translate that...
                          th(impl(P, impl(P, P)),
                          th(impl(impl(P, impl(P, P)), impl(P, P)), e))))))
                                                                     [by #MP]
+
+        th(X, e) = th(X, th(impl(P, impl(impl(P, P), P)),
+                         th(impl(P, P),
+                         th(impl(impl(P, impl(impl(P, P), P)), impl(impl(P, impl(P, P)), impl(P, P))),
+                         th(impl(P, impl(P, P)),
+                         th(impl(impl(P, impl(P, P)), impl(P, P)), e))))))
+                                                                    [by #th-comm]
+
+        th(X, e) = th(X, th(impl(P, P),
+                         th(impl(P, impl(impl(P, P), P)),
+                         th(impl(impl(P, impl(impl(P, P), P)), impl(impl(P, impl(P, P)), impl(P, P))),
+                         th(impl(P, impl(P, P)),
+                         th(impl(impl(P, impl(P, P)), impl(P, P)), e))))))
+                                                                    [by #th-comm]
+
+        th(X, e) = th(X, th(impl(P, P),
+                         th(impl(P, impl(impl(P, P), P)),
+                         th(impl(impl(P, impl(impl(P, P), P)), impl(impl(P, impl(P, P)), impl(P, P))),
+                         th(impl(impl(P, impl(P, P)), impl(P, P)), 
+                         th(impl(P, impl(P, P)), e))))))
+                                                                    [by #th-comm]
+
+        th(X, e) = th(X, th(impl(P, P),
+                         th(impl(P, impl(impl(P, P), P)),
+                         th(impl(impl(P, impl(impl(P, P), P)), impl(impl(P, impl(P, P)), impl(P, P))),
+                         th(impl(impl(P, impl(P, P)), impl(P, P)), e)))))
+                                                                    [by #A1]
+
+        th(X, e) = th(X, th(impl(P, P),
+                         th(impl(P, impl(impl(P, P), P)),
+                         th(impl(impl(P, impl(P, P)), impl(P, P)),
+                         th(impl(impl(P, impl(impl(P, P), P)), impl(impl(P, impl(P, P)), impl(P, P))), e)))))
+                                                                    [by #th-comm]
+
+        th(X, e) = th(X, th(impl(P, P),
+                         th(impl(impl(P, impl(P, P)), impl(P, P)),
+                         th(impl(P, impl(impl(P, P), P)),
+                         th(impl(impl(P, impl(impl(P, P), P)), impl(impl(P, impl(P, P)), impl(P, P))), e)))))
+                                                                    [by #th-comm]
+
+        th(X, e) = th(X, th(impl(P, P),
+                         th(impl(P, impl(impl(P, P), P)),
+                         th(impl(impl(P, impl(impl(P, P), P)), impl(impl(P, impl(P, P)), impl(P, P))), e))))
+                                                                    [by #MP]
+
+        th(X, e) = th(X, th(impl(P, P),
+                         th(impl(P, impl(impl(P, P), P)), e)))
+                                                                    [by #A2]
+
+        th(X, e) = th(X, th(impl(P, P), e))                         [by #A1]
     qed
 
 [An Algebraic Introduction to Mathematical Logic]: https://archive.org/details/algebraicintrodu00barn_0
