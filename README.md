@@ -163,11 +163,11 @@ but with the additional connotation that when a term such as
 `add(5, 0)` is "evaluated" it should "reduce" to `5`.  There
 is no connotation from this that "evaluating" 5 should "reduce"
 to anything however, but it would still be possible to appeal
-to the equality of `add(5, 0)` and `5` in a proof written in
-this language.
+to the equality `add(5, 0) = 5` in both directions in a proof
+written in this language.
 
 The practical upshot being that you could write small functional
-programs, and also proofs of some of their properties, in this
+programs and _also_ proofs of some of their properties, in this
 one language, which is only a modest superset of Eqthy.
 
 [Metamath]: https://us.metamath.org/
