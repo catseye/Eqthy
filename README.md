@@ -92,6 +92,8 @@ un-intimidating as possible.
 TODO
 ----
 
+### Small Items
+
 *   Handle "on LHS", "on RHS" in hints.
 *   Allow context accumulated when verifying one document to be
     carried over and used when verifying the next documnet.
@@ -107,7 +109,7 @@ TODO
 *   Johnson's 1892 axiom system given in Meredith and Prior's 1967 paper [Equational Logic](https://projecteuclid.org/download/pdf_1/euclid.ndjfl/1093893457)
 *   The theorem of ring theory given in [Equational Logic, Spring 2017](https://people.math.sc.edu/mcnulty/alglatvar/equationallogic.pdf) by McNulty (but it's a bit of a monster all right)
 
-### Aspirational Features
+### Aspirational Items
 
 #### Preprocessor
 
@@ -134,12 +136,13 @@ associative and/or commutative.  If Eqthy can be taught that
 
 matches
 
-    add(2, add(X, 1))
+    add(2, add(3, 1))
 
-in fact, because `add` is an associative and commutative
-operator, many proof steps can be omitted.  The trick would be
-to have a simple implementation of matching that supports this
-without adding too many lines of code to the proof checker.
+with the unifier `X=3` because it has been informed that `add`
+is an associative and commutative operator, then many proof steps
+can be omitted.  The trick would be to have a simple syntax that
+indicates this, and a simple implementation of matching that supports
+it without adding too many lines of code to the proof checker.
 
 #### Embedding in a Functional Programming Language
 
