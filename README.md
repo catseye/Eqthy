@@ -107,5 +107,65 @@ TODO
 *   Johnson's 1892 axiom system given in Meredith and Prior's 1967 paper [Equational Logic](https://projecteuclid.org/download/pdf_1/euclid.ndjfl/1093893457)
 *   The theorem of ring theory given in [Equational Logic, Spring 2017](https://people.math.sc.edu/mcnulty/alglatvar/equationallogic.pdf) by McNulty (but it's a bit of a monster all right)
 
+### Aspirational Features
+
+#### Preprocessor
+
+It would make some sense to split off the code that
+parses an Eqthy document into its own program, which the main
+program calls when reading in an Eqthy document, much in the same
+vein as the C preprocessor does.  This would necessitate defining
+a simple intermediate format (S-expressions or JSON) by which the
+preprocessor communicates the parsed document to the main prover.
+
+This would allow the syntax to become more sophisticated (for
+example, supporting infix syntax for operators) while the core
+proof checker is unchanged.  And would allow re-implementing the
+core proof checker in another language without necessitating
+rewriting the entire parser too.
+
+#### AC-unification
+
+Or rather, AC-matching.  An awful lot of a typical Eqthy proof
+involves merely rearranging things around operators that are
+associative and/or commutative.  If Eqthy can be taught that
+
+    add(add(1, 2), X)
+
+matches
+
+    add(2, add(X, 1))
+
+in fact, because `add` is an associative and commutative
+operator, many proof steps can be omitted.  The trick would be
+to have a simple implementation of matching that supports this
+without adding too many lines of code to the proof checker.
+
+#### Embedding in a Functional Programming Language
+
+This may by its nature be a seperate project, as it would
+involve creating a functional programming language of which Eqthy
+is a subset.
+
+The idea is that we would introduce a special form of axiom with
+some additional connotations.  For example,
+
+    def add(X, 0) => X
+
+would be in all respects the same as
+
+    axiom add(X, 0) = X
+
+but with the additional connotation that when a term such as
+`add(5, 0)` is "evaluated" it should "reduce" to `5`.  There
+is no connotation from this that "evaluating" 5 should "reduce"
+to anything however, but it would still be possible to appeal
+to the equality of `add(5, 0)` and `5` in a proof written in
+this language.
+
+The practical upshot being that you could write small functional
+programs, and also proofs of some of their properties, in this
+one language, which is only a modest superset of Eqthy.
+
 [Metamath]: https://us.metamath.org/
 [equational logic]: doc/Equational-Logic.md

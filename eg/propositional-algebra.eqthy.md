@@ -41,7 +41,9 @@ set of theorems which contains this theorem.
 
 Unfortunately, with the machinery that we've got so far, even though we
 only care that the resulting set contains `impl(P, P)`, we show much more than
-that -- we show all the intermediate results in getting there. So, we have to work backwards -- removing the inetermediate results using the same axioms used to add them -- for all the theorems except the desired theorem (`impl(P, P)`).
+that -- we show all the intermediate results in getting there. So, we have to work
+backwards -- removing the inetermediate results using the same axioms used to add
+them -- for all the theorems except the desired theorem (`impl(P, P)`).
 
     theorem
         th(X, e) = th(X, th(impl(P, P), e))

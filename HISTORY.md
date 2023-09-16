@@ -17,10 +17,10 @@ Distribution:
 
 *   The axiom system used in `propositional-algebra.eqthy.md`
     was identified to be inconsistent, also by @pro465.  The
-    axiom was replaced with one that is probably not
-    inconsistent, and the proof was repaired (although not
-    in a particularly satisfying way -- the whole thing could
-    stand to be done in a simpler way, if possible).
+    axiom was replaced with one that is most likely not
+    inconsistent, and the proof was repaired.
+*   Added some larger aspirational items to the TODO section
+    of the README.
 
 0.2
 ---
