@@ -16,7 +16,7 @@ For more information, see
     axiom (#and-comp)       and(A, not(A)) = 0
 
 We'll now establish some basic lemmas based on these axioms.
-These in turn would provide support for
+These in turn will provide support for
 a proof of De Morgan's Laws. Also, the lemmas
 are instructive, could be useful for other proofs, and serve
 the point of exercising the Eqthy language and its proof-checkers.
