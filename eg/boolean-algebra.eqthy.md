@@ -144,7 +144,7 @@ is not expressible in equational logic, so can't directly be written in Eqthy. A
 
 But, we can still express the specific instance of it:
 
-    theorem
+    theorem (#de-morgans-1)
         not(and(A, B)) = or(not(A), not(B))
     proof
         not(and(A, B)) = not(and(A, B))                                                                          [by reflexivity]
@@ -161,7 +161,7 @@ But, we can still express the specific instance of it:
         not(and(A, B)) = or(not(A), not(B))                                                                      [by #and-ident]
     qed
 
-To finish this off, we can state a couple of other potentially
+Before we state the other De Morgan's law, we state a couple of other
 useful lemmas involving `not`.
 
     theorem
@@ -199,4 +199,19 @@ useful lemmas involving `not`.
         or(not(not(A)), and(A, not(A))) = A
         or(not(not(A)), 0) = A
         not(not(A)) = A
+    qed
+
+with these, the other De Morgan's law can be easily proved:
+
+    theorem (#de-morgans-2)
+        not(or(A, B)) = and(not(A), not(B))
+    proof
+        not(and(A, B)) = not(and(A, B))
+        or(not(A), not(B)) = not(and(A, B))                                                             [by #de-morgans-1]
+        or(not(not(A)), not(B)) = not(and(not(A), B))                                                   [by substitution of not(A) into A]
+        or(not(not(A)), not(not(B))) = not(and(not(A), not(B)))                                         [by substitution of not(B) into B]
+        not(or(not(not(A)), not(not(B)))) = not(not(and(not(A), not(B))))                               [by congruence of C and not(C)]
+        not(or(not(not(A)), not(not(B)))) = and(not(A), not(B)) 
+        not(or(A, not(not(B)))) = and(not(A), not(B)) 
+        not(or(A, B)) = and(not(A), not(B)) 
     qed
