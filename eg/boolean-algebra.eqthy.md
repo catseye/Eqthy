@@ -16,10 +16,8 @@ For more information, see
     axiom (#and-comp)       and(A, not(A)) = 0
 
 We'll now establish some basic lemmas based on these axioms.
-These in turn could, in another setting, provide support for
-a proof of De Morgan's Laws.  In this purely equational setting though,
-for reasons I'll explain below, we won't actually be able to give
-a proof De Morgan's Laws using them.  Still, the lemmas
+These in turn will provide support for
+a proof of De Morgan's Laws. Also, the lemmas
 are instructive, could be useful for other proofs, and serve
 the point of exercising the Eqthy language and its proof-checkers.
 
@@ -86,7 +84,7 @@ and, where those are lacking,
         and(X, 0) = 0
     qed
 
-    theorem
+    theorem (#and-rel)
         and(and(A, B), or(not(A), not(B))) = 0
     proof
         0 = 0
@@ -103,7 +101,7 @@ and, where those are lacking,
         and(and(A, B), or(not(A), not(B))) = 0
     qed
 
-    theorem
+    theorem (#or-rel)
         or(and(A, B), or(not(A), not(B))) = 1
     proof
         1 = 1
@@ -135,17 +133,35 @@ following Huntington's 1904 approach), which is basically
 >     infer
 >       not(and(A, B)) = or(not(A), not(B))
 
-is not expressible in equational logic, so can't be written in Eqthy.
-This is why I said above that we would not be able to follow this
-path of lemmas all the way to a proof of De Morgan's Laws.
+is not expressible in equational logic, so can't directly be written in Eqthy. At least, not the general version of it:
+>     From
+>       and(X, Y) = 0
+>     and
+>       or(X, Y) = 1
+>     infer
+>       not(X) = Y
 
-(There _is_ a purely equational proof of De Morgan's Laws; I know this
-because I asked the E prover to find one, and it did so.  I would
-need to translate it into Eqthy to include it here, and I haven't
-done so yet.  I also don't know yet how much similarity it bears to
-Huntington's approach.)
 
-In the meantime however, we can state a couple of other potentially
+But, we can still express the specific instance of it:
+
+    theorem (#de-morgans-1)
+        not(and(A, B)) = or(not(A), not(B))
+    proof
+        not(and(A, B)) = not(and(A, B))                                                                          [by reflexivity]
+        not(and(A, B)) = and(not(and(A, B)), 1)                                                                  [by #and-ident]
+        not(and(A, B)) = and(not(and(A, B)), or(and(A, B), or(not(A), not(B))))                                  [by #or-rel]
+        not(and(A, B)) = or(and(not(and(A, B)), and(A, B)), and(not(and(A, B)), or(not(A), not(B))))             [by #and-dist]
+        not(and(A, B)) = or(and(and(A, B), not(and(A, B))), and(not(and(A, B)), or(not(A), not(B))))             [by #and-comm]
+        not(and(A, B)) = or(0, and(not(and(A, B)), or(not(A), not(B))))                                          [by #and-comp]
+        not(and(A, B)) = or(and(and(A, B), or(not(A), not(B))), and(not(and(A, B)), or(not(A), not(B))))         [by #and-rel]
+        not(and(A, B)) = or(and(or(not(A), not(B)), and(A, B)), and(not(and(A, B)), or(not(A), not(B))))         [by #and-comm]
+        not(and(A, B)) = or(and(or(not(A), not(B)), and(A, B)), and(or(not(A), not(B)), not(and(A, B))))         [by #and-comm]
+        not(and(A, B)) = and(or(not(A), not(B)), or(and(A, B), not(and(A, B))))                                  [by #and-dist]
+        not(and(A, B)) = and(or(not(A), not(B)), 1)                                                              [by #or-comp]
+        not(and(A, B)) = or(not(A), not(B))                                                                      [by #and-ident]
+    qed
+
+Before we state the other De Morgan's law, we state a couple of other
 useful lemmas involving `not`.
 
     theorem
@@ -183,4 +199,19 @@ useful lemmas involving `not`.
         or(not(not(A)), and(A, not(A))) = A
         or(not(not(A)), 0) = A
         not(not(A)) = A
+    qed
+
+with these, the other De Morgan's law can be easily proved:
+
+    theorem (#de-morgans-2)
+        not(or(A, B)) = and(not(A), not(B))
+    proof
+        not(and(A, B)) = not(and(A, B))
+        or(not(A), not(B)) = not(and(A, B))                                                             [by #de-morgans-1]
+        or(not(not(A)), not(B)) = not(and(not(A), B))                                                   [by substitution of not(A) into A]
+        or(not(not(A)), not(not(B))) = not(and(not(A), not(B)))                                         [by substitution of not(B) into B]
+        not(or(not(not(A)), not(not(B)))) = not(not(and(not(A), not(B))))                               [by congruence of C and not(C)]
+        not(or(not(not(A)), not(not(B)))) = and(not(A), not(B)) 
+        not(or(A, not(not(B)))) = and(not(A), not(B)) 
+        not(or(A, B)) = and(not(A), not(B)) 
     qed
