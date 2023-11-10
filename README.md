@@ -1,8 +1,8 @@
 Eqthy
 =====
 
-_Version 0.3_ | _See also:_ [Philomath](https://github.com/catseye/Philomath#readme)
-∘ [LCF-style-ND](https://github.com/cpressey/LCF-style-ND#readme)
+_Version 0.3_ | _See also:_ [Philomath](https://codeberg.org/catseye/Philomath#philomath)
+∘ [LCF-style-ND](https://codeberg.org/catseye/The-Dossier/src/branch/master/article/LCF-style-Natural-Deduction/README.md)
 
 - - - -
 
